@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.GameHeaderFragment" >
+
+    <ImageView
+        android:id="@+id/player1Image"
+        android:layout_width="114dp"
+        android:layout_height="118dp"
+        android:contentDescription="Player 1 Image"
+        android:padding="10dp"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/player1Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/player1Image"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:text="Player 1" />
+
+    <TextView
+        android:id="@+id/player1Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/player1Name"
+        android:layout_below="@id/player1Name"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:text="100" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/player1Name"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="20dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:text="60" />
+
+    <TextView
+        android:id="@+id/player2Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/time"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:text="Player 2" />
+
+    <TextView
+        android:id="@+id/player2Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/player2Name"
+        android:layout_below="@id/player2Name"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:text="100" />
+
+    <ImageView
+        android:id="@+id/player2Image"
+        android:layout_width="114dp"
+        android:layout_height="118dp"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/player2Name"
+        android:contentDescription="Player 2 Image"
+        tools:src="@tools:sample/avatars" />
+
+</RelativeLayout>
