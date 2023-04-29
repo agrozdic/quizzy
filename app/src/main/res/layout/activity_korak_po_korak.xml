@@ -1,0 +1,131 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.KoZnaZnaActivity">
+
+    <RelativeLayout
+        android:id="@+id/headKorakPoKorak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="10dp">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:progress="90"
+            android:progressTint="#04FF23"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/korak1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 1"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/korak2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 2"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/korak3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 3"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/korak4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 4"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/korak5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 5"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/korak6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 6"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/korak7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#8966C6"
+            android:layout_marginBottom="5dp"
+            android:padding="10dp"
+            android:text="Korak 7"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editOdgovor"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:hint="Unesite pojam"
+                android:textAlignment="center" />
+
+            <ImageButton
+                android:id="@+id/iconOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/baseline_check_24"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

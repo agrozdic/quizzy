@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:addStatesFromChildren="true"
+    android:orientation="vertical"
+    tools:context=".activities.SkockoActivity">
+
+    <RelativeLayout
+        android:id="@+id/headSkocko"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje1x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje1x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje1x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje1x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak1x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak1x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak1x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak1x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconAndroid"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/ic_android_black_24dp"
+                app:tint="#FFFFFF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje2x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje2x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje2x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje2x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak2x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak2x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak2x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak2x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconTref"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/cards_club"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje3x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje3x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje3x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje3x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak3x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak3x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak3x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak3x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconPik"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/cards_spade"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje4x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje4x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje4x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje4x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak4x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak4x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak4x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak4x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconSrce"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/cards_heart"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje5x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje5x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje5x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje5x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak5x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak5x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak5x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak5x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconKaro"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/cards_diamond"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje6x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje6x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje6x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje6x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak6x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak6x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak6x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak6x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconZvezda"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#673AB7"
+                app:srcCompat="@drawable/baseline_star_24"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje7x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje7x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje7x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje7x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/pogodak7x1"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak7x2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak7x3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/pogodak7x4"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#C3C3C3"
+                app:srcCompat="@drawable/baseline_circle_24"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconPrazno"
+                android:layout_width="96dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/polje8x1"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje8x2"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje8x3"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <Button
+                android:id="@+id/polje8x4"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:text="" />
+
+            <ImageButton
+                android:id="@+id/iconPrazno8x1"
+                android:layout_width="96dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconPrazno8x2"
+                android:layout_width="96dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconPrazno8x3"
+                android:layout_width="96dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconPrazno8x4"
+                android:layout_width="96dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:tint="#000000" />
+
+            <ImageButton
+                android:id="@+id/iconPrazno2"
+                android:layout_width="96dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
