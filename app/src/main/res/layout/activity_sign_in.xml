@@ -27,10 +27,26 @@
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/buttonSignIn"
+            android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="login"
             android:text="Login" />
+
+        <Button
+            android:id="@+id/btnCreateAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="createAccount"
+            android:text="Create Account" />
+
+        <Button
+            android:id="@+id/btnContGuest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:onClick="contGuest"
+            android:text="Continue As Guest" />
 
     </LinearLayout>
 

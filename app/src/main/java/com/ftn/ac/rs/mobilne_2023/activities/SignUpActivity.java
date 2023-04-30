@@ -2,7 +2,9 @@ package com.ftn.ac.rs.mobilne_2023.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.ftn.ac.rs.mobilne_2023.R;
 
@@ -13,5 +15,13 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up);
+
+        Button btnSignUp = findViewById(R.id.btnSignUp);
+        btnSignUp.setOnClickListener(view -> register());
+    }
+
+    protected void register() {
+        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+        startActivity(intent);
     }
 }

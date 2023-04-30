@@ -7,7 +7,7 @@
     tools:context=".activities.KoZnaZnaActivity">
 
     <RelativeLayout
-        android:id="@+id/headKorakPoKorak"
+        android:id="@+id/headMojBroj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
