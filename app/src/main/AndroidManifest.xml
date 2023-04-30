@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Mobilne2023"
         tools:targetApi="31">
         <activity
+            android:name=".activities.RangListaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ProfileActivity"
             android:exported="false" />
         <activity
