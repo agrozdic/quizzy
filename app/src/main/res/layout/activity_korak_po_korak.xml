@@ -31,73 +31,73 @@
             android:layout_marginBottom="10dp"/>
 
         <TextView
-            android:id="@+id/korak1"
+            android:id="@+id/step1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 1"
+            android:text="Step 1"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/korak2"
+            android:id="@+id/step2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 2"
+            android:text="Step 2"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/korak3"
+            android:id="@+id/step3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 3"
+            android:text="Step 3"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/korak4"
+            android:id="@+id/step4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 4"
+            android:text="Step 4"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/korak5"
+            android:id="@+id/step5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 5"
+            android:text="Step 5"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/korak6"
+            android:id="@+id/step6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 6"
+            android:text="Step 6"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/korak7"
+            android:id="@+id/step7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#8966C6"
             android:layout_marginBottom="5dp"
+            android:background="#8966C6"
             android:padding="10dp"
-            android:text="Korak 7"
+            android:text="Step 7"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -106,16 +106,16 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editOdgovor"
+                android:id="@+id/editAnswer"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
                 android:layout_marginRight="5dp"
-                android:hint="Unesite pojam"
+                android:layout_marginBottom="5dp"
+                android:hint="Answer"
                 android:textAlignment="center" />
 
             <ImageButton
-                android:id="@+id/iconOk"
+                android:id="@+id/iconOkKorakPoKorak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

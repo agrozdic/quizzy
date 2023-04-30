@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.SignUpActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -17,7 +17,7 @@
             android:id="@+id/editUsernameUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Korisnicko ime" />
+            android:hint="Username" />
 
         <EditText
             android:id="@+id/editEmailUp"
@@ -30,21 +30,21 @@
             android:id="@+id/editPassUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Lozinka"
+            android:hint="Password"
             android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/editRepeatPassUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ponovite lozinku"
+            android:hint="Repeat Password"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/buttonSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registrujte se" />
+            android:text="Register" />
 
     </LinearLayout>
 

@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Korisnicko ime"
+        android:text="Username"
         android:textAlignment="center"
         android:textSize="20sp" />
 
@@ -42,17 +42,17 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:id="@+id/textStatistika"
+            android:id="@+id/txtStats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Statistika"
+            android:text="Statistics"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/statistikaKoZnaZna"
+            android:id="@+id/statsKoZnaZna"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -61,7 +61,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/statistikaSpojnice"
+            android:id="@+id/statsSpojnice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -70,7 +70,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/statistikaAsocijacije"
+            android:id="@+id/statsAsocijacije"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -79,7 +79,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/statistikaSkocko"
+            android:id="@+id/statsSkocko"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -88,7 +88,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/statistikaKorakPoKorak"
+            android:id="@+id/statsKorakPoKorak"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -97,7 +97,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/statistikaMojBroj"
+            android:id="@+id/statsMojBroj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

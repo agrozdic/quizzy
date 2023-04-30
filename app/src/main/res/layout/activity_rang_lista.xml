@@ -9,14 +9,14 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textStatistika2"
+        android:id="@+id/txtRangStats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
         android:layout_weight="1"
-        android:text="Statistika"
+        android:text="Rang Statistics"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:layout_marginVertical="5dp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -26,20 +26,20 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnNedelja"
+            android:id="@+id/btnWeek"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="Nedelja" />
+            android:text="Week" />
 
         <Button
-            android:id="@+id/btnMesec"
+            android:id="@+id/btnMonth"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="Mesec" />
+            android:text="Month" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,17 +57,17 @@
             app:srcCompat="@drawable/profile" />
 
         <TextView
-            android:id="@+id/textProfile1"
+            android:id="@+id/textFriend1"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Prijatelj 1"
+            android:text="Friend 1"
             android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textProfile1Stars"
+            android:id="@+id/textFriend1Stars"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -93,17 +93,17 @@
             app:srcCompat="@drawable/profile" />
 
         <TextView
-            android:id="@+id/textProfile2"
+            android:id="@+id/textFriend2"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Prijatelj 2"
+            android:text="Friend 2"
             android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textProfile2Stars"
+            android:id="@+id/textFriend2Stars"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -129,17 +129,17 @@
             app:srcCompat="@drawable/profile" />
 
         <TextView
-            android:id="@+id/textProfile3"
+            android:id="@+id/textFriend3"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Prijatelj 3"
+            android:text="Friend 3"
             android:textAlignment="center"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textProfile3Stars"
+            android:id="@+id/textFriend3Stars"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -21,7 +21,7 @@
         android:layout_marginHorizontal="10dp">
 
         <TextView
-            android:id="@+id/trazeniBroj"
+            android:id="@+id/findNumMojBroj"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -33,25 +33,25 @@
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/buttonZaustavi"
+            android:id="@+id/btnStopMojBroj"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginRight="5dp"
-            android:text="Zaustavi" />
+            android:text="Stop" />
 
         <Button
-            android:id="@+id/buttonResenje"
+            android:id="@+id/btnSolutionMojBroj"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginRight="5dp"
-            android:hint="Resenje" />
+            android:hint="Solution" />
 
         <Button
-            android:id="@+id/buttonPotvrdi"
+            android:id="@+id/btnConfirmMojBroj"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginRight="5dp"
-            android:text="Potvrdi" />
+            android:text="Confirm" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,21 +61,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonBr1"
+                android:id="@+id/btnBr1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="3" />
 
             <Button
-                android:id="@+id/buttonBr2"
+                android:id="@+id/btnBr2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="4" />
 
             <Button
-                android:id="@+id/buttonBr3"
+                android:id="@+id/btnBr3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
@@ -83,21 +83,21 @@
 
 
             <Button
-                android:id="@+id/buttonBr4"
+                android:id="@+id/btnBr4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="6" />
 
             <Button
-                android:id="@+id/buttonBr5"
+                android:id="@+id/btnBr5"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="10" />
 
             <Button
-                android:id="@+id/buttonBr6"
+                android:id="@+id/btnBr6"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
@@ -113,21 +113,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonPlus"
+                android:id="@+id/btnPlus"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="+" />
 
             <Button
-                android:id="@+id/buttonMinus"
+                android:id="@+id/btnMinus"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="-" />
 
             <Button
-                android:id="@+id/buttonPuta"
+                android:id="@+id/btnMultiply"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
@@ -135,21 +135,21 @@
 
 
             <Button
-                android:id="@+id/buttonPodeljeno"
+                android:id="@+id/btnDivide"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="/" />
 
             <Button
-                android:id="@+id/buttonOtvorenaZagrada"
+                android:id="@+id/btnOpenBracket"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="(" />
 
             <Button
-                android:id="@+id/buttonZatvorenaZagrada"
+                android:id="@+id/btnClosedBracket"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"

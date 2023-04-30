@@ -9,14 +9,14 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textListaPrijatelja"
+        android:id="@+id/textFriendList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="5dp"
         android:layout_weight="1"
-        android:text="Lista prijatelja"
+        android:text="Friend List"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:layout_marginVertical="5dp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -43,12 +43,12 @@
                 app:srcCompat="@drawable/profile" />
 
             <TextView
-                android:id="@+id/textProfile1"
+                android:id="@+id/textFriend1"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Prijatelj 1"
+                android:text="Friend 1"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -71,12 +71,12 @@
                 app:srcCompat="@drawable/profile" />
 
             <TextView
-                android:id="@+id/textProfile2"
+                android:id="@+id/textFriend2"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Prijatelj 2"
+                android:text="Friend 2"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -99,12 +99,12 @@
                 app:srcCompat="@drawable/profile" />
 
             <TextView
-                android:id="@+id/textProfile3"
+                android:id="@+id/textFriend3"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="Prijatelj 3"
+                android:text="Friend 3"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -113,7 +113,7 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/iconAndroid"
+        android:id="@+id/iconSearchFriendList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
