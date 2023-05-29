@@ -20,16 +20,6 @@
         android:orientation="vertical"
         android:layout_marginHorizontal="10dp">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:progress="90"
-            android:progressTint="#04FF23"
-            android:layout_marginBottom="10dp"/>
-
         <TextView
             android:id="@+id/step1"
             android:layout_width="match_parent"

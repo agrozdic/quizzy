@@ -20,13 +20,5 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
         FragmentTransition.to(GameHeaderFragment.newInstance("param1", "param2"), AsocijacijeActivity.this,
                 false, R.id.headAsocijacije);
-
-        FloatingActionButton fab = findViewById(R.id.fab3);
-        fab.setOnClickListener(view -> fab3());
-    }
-
-    protected void fab3() {
-        Intent intent = new Intent(AsocijacijeActivity.this, SkockoActivity.class);
-        startActivity(intent);
     }
 }
