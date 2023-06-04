@@ -1,5 +1,7 @@
 package com.ftn.ac.rs.mobilne_2023.model;
 
+import java.util.Map;
+
 public class Asocijacije {
 
     private String a1;
@@ -29,6 +31,34 @@ public class Asocijacije {
     private String konacno;
 
     public Asocijacije() { }
+
+    public Asocijacije(Map<String, Object> firestoreResult) {
+        this.a1 = (String) firestoreResult.get("a1");
+        this.a2 = (String) firestoreResult.get("a2");
+        this.a3 = (String) firestoreResult.get("a3");
+        this.a4 = (String) firestoreResult.get("a4");
+        this.a5 = (String) firestoreResult.get("a5");
+
+        this.b1 = (String) firestoreResult.get("b1");
+        this.b2 = (String) firestoreResult.get("b2");
+        this.b3 = (String) firestoreResult.get("b3");
+        this.b4 = (String) firestoreResult.get("b4");
+        this.b5 = (String) firestoreResult.get("b5");
+
+        this.c1 = (String) firestoreResult.get("c1");
+        this.c2 = (String) firestoreResult.get("c2");
+        this.c3 = (String) firestoreResult.get("c3");
+        this.c4 = (String) firestoreResult.get("c4");
+        this.c5 = (String) firestoreResult.get("c5");
+
+        this.d1 = (String) firestoreResult.get("d1");
+        this.d2 = (String) firestoreResult.get("d2");
+        this.d3 = (String) firestoreResult.get("d3");
+        this.d4 = (String) firestoreResult.get("d4");
+        this.d5 = (String) firestoreResult.get("d5");
+
+        this.konacno = (String) firestoreResult.get("konacno");
+    }
 
     public String getA1() {
         return a1;
