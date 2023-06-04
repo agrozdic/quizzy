@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "944310626473",
+    "project_id": "mobilne-2023",
+    "storage_bucket": "mobilne-2023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944310626473:android:141c307dbf5f1b327b61b8",
+        "android_client_info": {
+          "package_name": "com.ftn.ac.rs.mobilne_2023"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq8jHekddGT_9N1Isi-btAJJS_ha_86vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
