@@ -57,6 +57,7 @@
                 android:id="@+id/aKolAsocijacije"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="A"
                 android:inputType="text"
@@ -101,6 +102,7 @@
                 android:id="@+id/bKolAsocijacije"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="B"
                 android:inputType="text"
@@ -109,12 +111,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputEditText
+    <EditText
         android:id="@+id/konacnoAsocijacije"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:gravity="center"
-        android:hint="- ? -"/>
+        android:imeOptions="actionDone"
+        android:hint="- ? -"
+        android:ems="8"
+        android:inputType="text"
+        android:textAlignment="center"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -131,6 +138,7 @@
                 android:id="@+id/cKolAsocijacije"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="C"
                 android:inputType="text"
@@ -175,6 +183,7 @@
                 android:id="@+id/dKolAsocijacije"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="D"
                 android:inputType="text"

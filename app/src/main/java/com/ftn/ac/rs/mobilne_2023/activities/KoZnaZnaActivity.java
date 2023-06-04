@@ -27,6 +27,9 @@ public class KoZnaZnaActivity extends AppCompatActivity {
 
     protected void fab1() {
         Intent intent = new Intent(KoZnaZnaActivity.this, SpojniceActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("unreg-score", "0");
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

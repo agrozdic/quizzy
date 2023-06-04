@@ -27,6 +27,9 @@ public class SpojniceActivity extends AppCompatActivity {
 
     protected void fab2() {
         Intent intent = new Intent(SpojniceActivity.this, AsocijacijeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("unreg-score", "0");
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }
