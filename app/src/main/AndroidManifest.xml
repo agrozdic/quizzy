@@ -37,7 +37,7 @@
             android:exported="true" />
         <activity
             android:name=".activities.AsocijacijeActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.SpojniceActivity"
             android:exported="false" />
