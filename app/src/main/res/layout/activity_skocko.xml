@@ -341,7 +341,7 @@
                 app:tint="#000000" />
 
             <ImageButton
-                android:id="@+id/iconSrce"
+                android:id="@+id/iconHerc"
                 android:layout_width="96dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -530,28 +530,32 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:enabled="false" />
 
             <Button
                 android:id="@+id/field7x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:enabled="false" />
 
             <Button
                 android:id="@+id/field7x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:enabled="false" />
 
             <Button
                 android:id="@+id/field7x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:enabled="false" />
 
             <ImageButton
                 android:id="@+id/hit7x1"
@@ -560,7 +564,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#C3C3C3"
                 app:srcCompat="@drawable/baseline_circle_24"
-                app:tint="#000000" />
+                app:tint="#000000"
+                android:enabled="false" />
 
             <ImageButton
                 android:id="@+id/hit7x2"
@@ -569,7 +574,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#C3C3C3"
                 app:srcCompat="@drawable/baseline_circle_24"
-                app:tint="#000000" />
+                app:tint="#000000"
+                android:enabled="false" />
 
             <ImageButton
                 android:id="@+id/hit7x3"
@@ -578,7 +584,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="#C3C3C3"
                 app:srcCompat="@drawable/baseline_circle_24"
-                app:tint="#000000" />
+                app:tint="#000000"
+                android:enabled="false" />
 
             <ImageButton
                 android:id="@+id/hit7x4"
@@ -673,15 +680,21 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/submitSkocko"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Submit"/>
+
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_weight=".05"
-        android:clickable="true"
-        android:onClick="fab4" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab4"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_weight=".05"-->
+<!--        android:clickable="true"-->
+<!--        android:onClick="fab4" />-->
 
 </LinearLayout>
