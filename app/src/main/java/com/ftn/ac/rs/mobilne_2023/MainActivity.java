@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ftn.ac.rs.mobilne_2023.activities.FriendListActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.KoZnaZnaActivity;
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         btnShowProfile.setOnClickListener(view -> showProfile());
         btnStartGame.setOnClickListener(view -> startGame());
         showFriendList.setOnClickListener(view -> showFriendList());
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Toast.makeText(this,
+                    "Total score after game: " + bundle.getString("unreg-score"),
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     protected void showRankList() {

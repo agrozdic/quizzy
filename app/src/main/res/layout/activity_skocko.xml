@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:id="@+id/headSkocko"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
@@ -18,7 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field1x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -35,21 +35,21 @@
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field1x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field1x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field1x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -109,7 +109,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field2x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -117,21 +117,21 @@
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field2x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field2x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field2x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -192,7 +192,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field3x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -200,21 +200,21 @@
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field3x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field3x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field3x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -275,7 +275,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field4x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -283,21 +283,21 @@
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field4x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field4x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field4x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -358,7 +358,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field5x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -366,21 +366,21 @@
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field5x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field5x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field5x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -441,7 +441,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field6x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -449,21 +449,21 @@
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field6x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field6x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
                 android:text="" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/field6x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
@@ -612,34 +612,38 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/field8x1"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:backgroundTint="@color/purple_500"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/field8x2"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:backgroundTint="@color/purple_500"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/field8x3"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:backgroundTint="@color/purple_500"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/field8x4"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="5dp"
-                android:text="" />
+                android:text=""
+                android:backgroundTint="@color/purple_500"/>
 
             <ImageButton
                 android:id="@+id/iconEmpty8x1"
@@ -687,14 +691,5 @@
             android:text="Submit"/>
 
     </LinearLayout>
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/fab4"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="end"-->
-<!--        android:layout_weight=".05"-->
-<!--        android:clickable="true"-->
-<!--        android:onClick="fab4" />-->
 
 </LinearLayout>

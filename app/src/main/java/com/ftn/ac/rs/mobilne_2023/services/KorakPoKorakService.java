@@ -12,7 +12,7 @@ public class KorakPoKorakService {
 
     public static Map<String, Object> get(int id, final KorakPoKorakService.KorakPoKorakCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("korakpokorak").document("korakpokora" + id)
+        db.collection("korakpokorak").document("korakpokorak" + id)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

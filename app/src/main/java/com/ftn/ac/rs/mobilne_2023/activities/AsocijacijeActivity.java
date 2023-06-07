@@ -50,7 +50,7 @@ public class AsocijacijeActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-        AsocijacijeService.get(1, result -> {
+        AsocijacijeService.get(round, result -> {
             Log.println(Log.INFO, "Recieved data: ", result.toString());
             asocijacijeModel = new Asocijacije(result);
 
@@ -79,12 +79,15 @@ public class AsocijacijeActivity extends AppCompatActivity {
                     bundle.putString("unreg-score", Integer.toString(playerScore));
                     bundle.putInt("round", ++round);
                     intent.putExtras(bundle);
+                    gameTimer.cancel();
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(AsocijacijeActivity.this, SkockoActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("unreg-score", Integer.toString(playerScore));
+                    bundle.remove("round");
                     intent.putExtras(bundle);
+                    gameTimer.cancel();
                     startActivity(intent);
                 }
             }
