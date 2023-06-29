@@ -56,7 +56,8 @@
             <EditText
                 android:id="@+id/aKolAsocijacije"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="A"
                 android:inputType="text"
@@ -100,7 +101,8 @@
             <EditText
                 android:id="@+id/bKolAsocijacije"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="B"
                 android:inputType="text"
@@ -109,12 +111,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputEditText
+    <EditText
         android:id="@+id/konacnoAsocijacije"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:ems="8"
         android:gravity="center"
-        android:hint="- ? -"/>
+        android:hint="\?\?\?"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:textAlignment="center" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -130,7 +137,8 @@
             <EditText
                 android:id="@+id/cKolAsocijacije"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="C"
                 android:inputType="text"
@@ -174,7 +182,8 @@
             <EditText
                 android:id="@+id/dKolAsocijacije"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:imeOptions="actionDone"
                 android:ems="8"
                 android:hint="D"
                 android:inputType="text"
@@ -210,14 +219,5 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_weight=".05"
-        android:clickable="true"
-        android:onClick="fab3" />
 
 </LinearLayout>

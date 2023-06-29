@@ -1,12 +1,11 @@
 package com.ftn.ac.rs.mobilne_2023.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import com.ftn.ac.rs.mobilne_2023.R;
 

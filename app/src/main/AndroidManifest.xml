@@ -22,7 +22,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.MojBrojActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.KorakPoKorakActivity"
             android:exported="true" />
@@ -37,7 +37,7 @@
             android:exported="true" />
         <activity
             android:name=".activities.AsocijacijeActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".activities.SpojniceActivity"
             android:exported="false" />
