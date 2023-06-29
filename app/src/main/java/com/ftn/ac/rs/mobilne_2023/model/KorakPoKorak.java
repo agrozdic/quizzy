@@ -1,7 +1,5 @@
 package com.ftn.ac.rs.mobilne_2023.model;
 
-import android.widget.Toast;
-
 import java.util.Map;
 
 public class KorakPoKorak {

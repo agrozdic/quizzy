@@ -1,11 +1,10 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ftn.ac.rs.mobilne_2023.MainActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ftn.ac.rs.mobilne_2023.R;
 
 import java.util.Timer;

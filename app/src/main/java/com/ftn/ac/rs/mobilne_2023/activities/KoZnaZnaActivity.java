@@ -1,15 +1,14 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.R;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
