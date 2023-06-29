@@ -1,7 +1,5 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,17 +11,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ftn.ac.rs.mobilne_2023.R;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
-import com.ftn.ac.rs.mobilne_2023.model.Asocijacije;
 import com.ftn.ac.rs.mobilne_2023.model.KorakPoKorak;
-import com.ftn.ac.rs.mobilne_2023.services.AsocijacijeService;
 import com.ftn.ac.rs.mobilne_2023.services.KorakPoKorakService;
 import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class KorakPoKorakActivity extends AppCompatActivity {
 

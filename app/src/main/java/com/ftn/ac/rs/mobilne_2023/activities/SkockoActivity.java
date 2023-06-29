@@ -1,26 +1,23 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ftn.ac.rs.mobilne_2023.R;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
 import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class SkockoActivity extends AppCompatActivity {
