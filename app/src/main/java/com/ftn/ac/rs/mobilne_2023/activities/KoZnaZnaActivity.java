@@ -120,21 +120,13 @@ public class KoZnaZnaActivity extends AppCompatActivity {
         answer3 = findViewById(R.id.answer3KoZnaZna);
         answer4 = findViewById(R.id.answer4KoZnaZna);
 
-        answer1.setOnClickListener(view -> {
-            checkAnswer((String) answer1.getText());
-        });
+        answer1.setOnClickListener(view -> checkAnswer((String) answer1.getText()));
 
-        answer2.setOnClickListener(view -> {
-            checkAnswer((String) answer2.getText());
-        });
+        answer2.setOnClickListener(view -> checkAnswer((String) answer2.getText()));
 
-        answer3.setOnClickListener(view -> {
-            checkAnswer((String) answer3.getText());
-        });
+        answer3.setOnClickListener(view -> checkAnswer((String) answer3.getText()));
 
-        answer4.setOnClickListener(view -> {
-            checkAnswer((String) answer4.getText());
-        });
+        answer4.setOnClickListener(view -> checkAnswer((String) answer4.getText()));
     }
 
     private void checkAnswer(String answer) {
