@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.MainActivity;
 import com.ftn.ac.rs.mobilne_2023.R;
+import com.ftn.ac.rs.mobilne_2023.services.UserService;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class SignInActivity extends AppCompatActivity {
 
     protected void login() {
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+        //UserService.loginUser("test", "test");
         startActivity(intent);
     }
 
