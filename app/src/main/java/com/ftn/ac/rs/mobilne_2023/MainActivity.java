@@ -12,8 +12,14 @@ import com.ftn.ac.rs.mobilne_2023.activities.FriendListActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.KoZnaZnaActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.ProfileActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.RankListActivity;
+import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
+
+
+import io.socket.client.Socket;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static Socket socket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
                     "Total score after game: " + bundle.getString("unreg-score"),
                     Toast.LENGTH_LONG).show();
         }
+
+        SocketHandler.setSocket();
+        socket = SocketHandler.getSocket();
+        socket.connect();
     }
 
     protected void showRankList() {
@@ -50,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void startGame() {
-        Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
-        startActivity(intent);
+        socket.emit("joinGame", "Test");
+        socket.on("startGame", args -> {
+            Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
+            startActivity(intent);
+        });
     }
 
     protected void showFriendList() {
