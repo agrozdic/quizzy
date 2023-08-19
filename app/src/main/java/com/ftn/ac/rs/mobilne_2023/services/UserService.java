@@ -11,8 +11,26 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserService {
+
+    private static Map<String, User> users = new HashMap<>();
+
+    static {
+        UserService.getAll(result -> {
+            for (int i = 1; i <= result.size(); i++) {
+                Map<String, Object> userData = (Map<String, Object>) result.get(String.valueOf(i));
+                int id = Integer.parseInt(userData.get("id").toString());
+                String email = (String) userData.get("email");
+                String username = (String) userData.get("username");
+                String pass = (String) userData.get("password");
+
+                User user = new User(id, email, username, pass);
+                users.put(Integer.toString(user.getId()), user);
+            }
+        });
+    }
 
     public static Map<String, Object> get(int id, final UserService.UserCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -78,23 +96,20 @@ public class UserService {
         return success[0];
     }
 
-//    public static boolean loginUser(String loginIdentifier, String password) {
-//        boolean success = false;
-//        boolean loginWithEmail = loginIdentifier.contains("@");
-//        Map<String, Object> users = new HashMap<>();
-//        Map<String, Object> finalUsers = users;
-//        users = UserService.getAll(result -> {
-//            Log.println(Log.INFO, "Test login: ", result.toString());
-//            User user = new User(
-//                    (Integer) result.get("id"),
-//                    (String) result.get("email"),
-//                    (String) result.get("username"),
-//                    (String) result.get("password"));
-//            finalUsers.put(Integer.toString(user.getId()), user);
-//                });
-//        Log.println(Log.INFO, "users ->", users.toString());
-//        return success;
-//    }
+    public boolean loginUser(String loginIdentifier, String password) {
+        boolean success = false;
+        boolean loginWithEmail = loginIdentifier.contains("@");
+
+        for (int i = 1; i <= users.size(); i++) {
+            User temp = (User) users.get(String.valueOf(i));
+            Log.println(Log.INFO, "temp -> ", temp.getUsername() + " " + temp.getPassword());
+            if ((loginWithEmail && temp.getEmail().equals(loginIdentifier) && temp.getPassword().equals(password))
+                    || (temp.getUsername().equals(loginIdentifier) && temp.getPassword().equals(password))) {
+                success = true;
+            }
+        }
+        return success;
+    }
 
     // callback interfejs zbog asinhronosti
     public interface UserCallback {
