@@ -49,7 +49,7 @@ public class KoZnaZnaActivity extends AppCompatActivity {
 
     private void startGame() {
         KoZnaZnaService.get(1, result -> {
-            Log.println(Log.INFO, "Recieved data: ", result.toString());
+            Log.println(Log.INFO, "Received data: ", result.toString());
             koZnaZnaModel = new KoZnaZna(result);
 
             player1ScoreView = findViewById(R.id.player1Score);
@@ -96,10 +96,7 @@ public class KoZnaZnaActivity extends AppCompatActivity {
                     loadData(timerCounter);
                     this.cancel();
                     this.start();
-                    answer1.setEnabled(true);
-                    answer2.setEnabled(true);
-                    answer3.setEnabled(true);
-                    answer4.setEnabled(true);
+                    enableAnswerButtons();
                 }
             }
         }.start();
@@ -120,11 +117,8 @@ public class KoZnaZnaActivity extends AppCompatActivity {
         answer4 = findViewById(R.id.answer4KoZnaZna);
 
         answer1.setOnClickListener(view -> checkAnswer((String) answer1.getText()));
-
         answer2.setOnClickListener(view -> checkAnswer((String) answer2.getText()));
-
         answer3.setOnClickListener(view -> checkAnswer((String) answer3.getText()));
-
         answer4.setOnClickListener(view -> checkAnswer((String) answer4.getText()));
     }
 
@@ -132,20 +126,28 @@ public class KoZnaZnaActivity extends AppCompatActivity {
         if (koZnaZnaModel.getAnswers().contains(answer)) {
             playerScore += 10;
             player1ScoreView.setText(Integer.toString(playerScore));
-            answer1.setEnabled(false);
-            answer2.setEnabled(false);
-            answer3.setEnabled(false);
-            answer4.setEnabled(false);
+            disableAnswerButtons();
             Toast.makeText(KoZnaZnaActivity.this, "Correct answer", Toast.LENGTH_SHORT).show();
         } else {
             playerScore -= 5;
             player1ScoreView.setText(Integer.toString(playerScore));
-            answer1.setEnabled(false);
-            answer2.setEnabled(false);
-            answer3.setEnabled(false);
-            answer4.setEnabled(false);
+            disableAnswerButtons();
             Toast.makeText(KoZnaZnaActivity.this, "Wrong answer", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void enableAnswerButtons() {
+        answer1.setEnabled(true);
+        answer2.setEnabled(true);
+        answer3.setEnabled(true);
+        answer4.setEnabled(true);
+    }
+
+    private void disableAnswerButtons() {
+        answer1.setEnabled(false);
+        answer2.setEnabled(false);
+        answer3.setEnabled(false);
+        answer4.setEnabled(false);
     }
 
     private void loadData(int set) {
