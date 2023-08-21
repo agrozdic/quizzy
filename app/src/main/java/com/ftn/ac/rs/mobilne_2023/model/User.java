@@ -1,5 +1,7 @@
 package com.ftn.ac.rs.mobilne_2023.model;
 
+import com.ftn.ac.rs.mobilne_2023.services.UserService;
+
 public class User {
 
     private int id;
@@ -23,12 +25,9 @@ public class User {
         this.password = password;
     }
 
-    /*GENERATOR JEDINSTVENIH ID-a*/
-    private static int idCounter = 1;
-
     public static int generateId()
     {
-        return ++idCounter;
+        return UserService.getUserCount() + 1;
     }
 
     public int getId() {

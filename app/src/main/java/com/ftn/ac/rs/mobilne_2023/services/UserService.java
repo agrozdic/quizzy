@@ -17,7 +17,26 @@ public class UserService {
 
     private static Map<String, User> users = new HashMap<>();
 
+    public static int getUserCount() {
+        return users.size();
+    }
+
     static {
+        UserService.getAll(result -> {
+            for (int i = 1; i <= result.size(); i++) {
+                Map<String, Object> userData = (Map<String, Object>) result.get(String.valueOf(i));
+                int id = Integer.parseInt(userData.get("id").toString());
+                String email = (String) userData.get("email");
+                String username = (String) userData.get("username");
+                String pass = (String) userData.get("password");
+
+                User user = new User(id, email, username, pass);
+                users.put(Integer.toString(user.getId()), user);
+            }
+        });
+    }
+
+    private static void reloadUsers() {
         UserService.getAll(result -> {
             for (int i = 1; i <= result.size(); i++) {
                 Map<String, Object> userData = (Map<String, Object>) result.get(String.valueOf(i));
@@ -77,8 +96,7 @@ public class UserService {
         return users;
     }
 
-    public static boolean addUser(int id, String email, String username, String password) {
-        final boolean[] success = {false};
+    public static void addUser(int id, String email, String username, String password) {
         Map<String, Object> user = new HashMap<>();
         user.put("id", id);
         user.put("email", email);
@@ -90,25 +108,29 @@ public class UserService {
                 .set(user)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "DocumentSnapshot successfully written");
-                    success[0] = true;
+                    reloadUsers();
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
-        return success[0];
     }
 
-    public boolean loginUser(String loginIdentifier, String password) {
-        boolean success = false;
+    public User loginUser(String loginIdentifier, String password) {
+        User user = null;
         boolean loginWithEmail = loginIdentifier.contains("@");
 
         for (int i = 1; i <= users.size(); i++) {
             User temp = (User) users.get(String.valueOf(i));
-            Log.println(Log.INFO, "temp -> ", temp.getUsername() + " " + temp.getPassword());
             if ((loginWithEmail && temp.getEmail().equals(loginIdentifier) && temp.getPassword().equals(password))
                     || (temp.getUsername().equals(loginIdentifier) && temp.getPassword().equals(password))) {
-                success = true;
+                user = temp;
             }
         }
-        return success;
+        return user;
+    }
+
+    // ako je povezan na internet, uvek ce proci, zato uvek vraca true
+    public boolean registerUser(User user) {
+        addUser(user.getId(), user.getEmail(), user.getUsername(), user.getPassword());
+        return true;
     }
 
     // callback interfejs zbog asinhronosti
