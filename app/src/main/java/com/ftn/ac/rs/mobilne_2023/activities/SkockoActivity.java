@@ -10,8 +10,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ftn.ac.rs.mobilne_2023.MainActivity;
 import com.ftn.ac.rs.mobilne_2023.R;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
 import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
@@ -111,6 +113,29 @@ public class SkockoActivity extends AppCompatActivity {
 
         Handler handler = new Handler();
         handler.postDelayed(() -> startGame(), 1000); // nasty hack
+    }
+
+    @Override
+    public void onBackPressed() {
+        //konfiguracija dijaloga
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Quit Game");
+        builder.setMessage("Are you sure you want to quit?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+
+            finish();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        // prikaz dijaloga
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void startGame() {
