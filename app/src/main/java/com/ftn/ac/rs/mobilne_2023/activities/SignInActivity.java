@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.MainActivity;
 import com.ftn.ac.rs.mobilne_2023.R;
+import com.ftn.ac.rs.mobilne_2023.model.User;
 import com.ftn.ac.rs.mobilne_2023.services.UserService;
+import com.ftn.ac.rs.mobilne_2023.tools.NetworkUtils;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -32,21 +34,36 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     protected void login() {
+        if (!NetworkUtils.isNetworkConnected(this)) {
+            Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
         EditText loginText = findViewById(R.id.editUsernameIn);
         String loginIdentifier = loginText.getText().toString();
         EditText passText = findViewById(R.id.editPassIn);
         String password = passText.getText().toString();
 
-        boolean success = userService.loginUser(loginIdentifier, password);
+        User user = userService.loginUser(loginIdentifier, password);
 
-        if (success)
+        if (user != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("user-username", user.getUsername());
+            bundle.putString("user-email", user.getEmail());
+            intent.putExtras(bundle);
             startActivity(intent);
+        }
         else
             Toast.makeText(this, "Wrong login data", Toast.LENGTH_SHORT).show();
     }
 
     protected void createAccount() {
+        if (!NetworkUtils.isNetworkConnected(this)) {
+            Toast.makeText(this, "You are not connected to the internet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
