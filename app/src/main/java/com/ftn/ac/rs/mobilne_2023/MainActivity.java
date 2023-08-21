@@ -12,6 +12,7 @@ import com.ftn.ac.rs.mobilne_2023.activities.FriendListActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.KoZnaZnaActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.ProfileActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.RankListActivity;
+import com.ftn.ac.rs.mobilne_2023.activities.SignInActivity;
 import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
 
 
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static Socket socket;
 
-    public static Bundle intentBundle;
+    private Bundle userBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         showFriendList.setOnClickListener(view -> showFriendList());
 
         Bundle bundle = getIntent().getExtras();
-        intentBundle = bundle;
+        userBundle = bundle;
 
         if (bundle != null && bundle.getString("unreg-score") != null) {
             Toast.makeText(this,
@@ -57,21 +58,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true); //back na MainActivity minimizuje aplikaciju
+        if (userBundle != null)
+            moveTaskToBack(true); //back na MainActivity minimizuje aplikaciju
+        else {
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
+
+            finish();
+        }
     }
 
     protected void showRankList() {
-        Intent intent = new Intent(MainActivity.this, RankListActivity.class);
-        startActivity(intent);
+        if (userBundle == null) {
+            Toast.makeText(this, "Register to access", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(MainActivity.this, RankListActivity.class);
+            startActivity(intent);
+        }
     }
 
     protected void showProfile() {
-        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-        startActivity(intent);
+        if (userBundle == null) {
+            Toast.makeText(this, "Register to access", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            intent.putExtras(userBundle);
+            startActivity(intent);
+        }
     }
 
     protected void startGame() {
-        if (intentBundle != null && intentBundle.getString("user-username") != null) {
+        if (userBundle != null && userBundle.getString("user-username") != null) {
             socket.emit("joinGame", "Test");
             socket.on("startGame", args -> {
                 Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
@@ -84,7 +101,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void showFriendList() {
-        Intent intent = new Intent(MainActivity.this, FriendListActivity.class);
-        startActivity(intent);
+        if (userBundle == null) {
+            Toast.makeText(this, "Register to access", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(MainActivity.this, FriendListActivity.class);
+            startActivity(intent);
+        }
     }
 }
