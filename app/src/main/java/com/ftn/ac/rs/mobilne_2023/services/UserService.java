@@ -96,8 +96,8 @@ public class UserService {
         return success[0];
     }
 
-    public boolean loginUser(String loginIdentifier, String password) {
-        boolean success = false;
+    public User loginUser(String loginIdentifier, String password) {
+        User user = null;
         boolean loginWithEmail = loginIdentifier.contains("@");
 
         for (int i = 1; i <= users.size(); i++) {
@@ -105,10 +105,10 @@ public class UserService {
             Log.println(Log.INFO, "temp -> ", temp.getUsername() + " " + temp.getPassword());
             if ((loginWithEmail && temp.getEmail().equals(loginIdentifier) && temp.getPassword().equals(password))
                     || (temp.getUsername().equals(loginIdentifier) && temp.getPassword().equals(password))) {
-                success = true;
+                user = temp;
             }
         }
-        return success;
+        return user;
     }
 
     // callback interfejs zbog asinhronosti

@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static Socket socket;
 
+    public static Bundle intentBundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,15 +40,24 @@ public class MainActivity extends AppCompatActivity {
         showFriendList.setOnClickListener(view -> showFriendList());
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
+        intentBundle = bundle;
+
+        if (bundle != null && bundle.getString("unreg-score") != null) {
             Toast.makeText(this,
                     "Total score after game: " + bundle.getString("unreg-score"),
                     Toast.LENGTH_LONG).show();
         }
 
-        SocketHandler.setSocket();
-        socket = SocketHandler.getSocket();
-        socket.connect();
+        if (bundle != null && bundle.getString("user-username") != null) {
+            SocketHandler.setSocket();
+            socket = SocketHandler.getSocket();
+            socket.connect();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true); //back na MainActivity minimizuje aplikaciju
     }
 
     protected void showRankList() {
@@ -60,11 +71,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void startGame() {
-        socket.emit("joinGame", "Test");
-        socket.on("startGame", args -> {
+        if (intentBundle != null && intentBundle.getString("user-username") != null) {
+            socket.emit("joinGame", "Test");
+            socket.on("startGame", args -> {
+                Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
+                startActivity(intent);
+            });
+        } else {
             Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
             startActivity(intent);
-        });
+        }
     }
 
     protected void showFriendList() {
