@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -15,6 +16,13 @@ import com.ftn.ac.rs.mobilne_2023.activities.RankListActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.SignInActivity;
 import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Dictionary;
+import java.util.Iterator;
 
 import io.socket.client.Socket;
 
@@ -89,10 +97,25 @@ public class MainActivity extends AppCompatActivity {
 
     protected void startGame() {
         if (userBundle != null && userBundle.getString("user-username") != null) {
-            socket.emit("joinGame", "Test");
+            socket.emit("joinGame", userBundle.getString("user-username"));
             socket.on("startGame", args -> {
-                Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
-                startActivity(intent);
+                if (args.length > 0 && args[0] instanceof JSONObject) {
+                    JSONObject data = (JSONObject) args[0];
+                    Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
+
+                    for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                        String socket = it.next();
+                        try {
+                            if (!data.get(socket).toString().equals(userBundle.getString("user-username")))
+                                intent.putExtra("opponent-username", data.get(socket).toString());
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    intent.putExtra("user-username", userBundle.getString("user-username"));
+                    startActivity(intent);
+                }
             });
         } else {
             Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
