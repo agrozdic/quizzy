@@ -73,6 +73,7 @@ public class KorakPoKorakActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
 
+            gameTimer.cancel();
             finish();
         });
 
