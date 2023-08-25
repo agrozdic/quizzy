@@ -12,10 +12,11 @@ import com.ftn.ac.rs.mobilne_2023.R;
 import com.ftn.ac.rs.mobilne_2023.model.User;
 import com.ftn.ac.rs.mobilne_2023.services.UserService;
 
+import java.util.regex.Pattern;
+
 public class SignUpActivity extends AppCompatActivity {
 
     UserService userService = new UserService();
-
     EditText usernameText;
     EditText emailText;
     EditText passText;
@@ -42,7 +43,11 @@ public class SignUpActivity extends AppCompatActivity {
         String pass = passText.getText().toString();
         String passRepeat = passRepeatText.getText().toString();
 
-        if (pass.equals(passRepeat)) {
+        boolean usernameValid = Pattern.matches("[._]*[A-Za-z]{3,}[\\w._]*", username);
+        boolean emailValid = Pattern.matches("[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}", email);
+        boolean passValid = Pattern.matches("[\\w-!#$%]*[A-Za-z]{3,}[\\w-!#$%]*", pass);
+
+        if (pass.equals(passRepeat) && passValid && pass.length() >= 6) {
             User user = new User(email, username, pass);
             boolean success = userService.registerUser(user);
 
@@ -55,8 +60,19 @@ public class SignUpActivity extends AppCompatActivity {
             }
         } else if (username.equals("")) {
             Toast.makeText(this, "Username can not be empty", Toast.LENGTH_SHORT).show();
+        } else if (!usernameValid) {
+            Toast.makeText(this,
+                    "Username must contain 3 letters. Alphanumeric characters and dot are allowed",
+                    Toast.LENGTH_SHORT).show();
         } else if (email.equals("")) {
             Toast.makeText(this, "Email can not be empty", Toast.LENGTH_SHORT).show();
+        } else if (!emailValid) {
+            Toast.makeText(this, "Email format not valid", Toast.LENGTH_SHORT).show();
+        } else if (!passValid || pass.length() < 6) {
+            Toast.makeText(this,
+                    "Password must contain 3 letters and have minimum length of 6." +
+                            "Alphanumeric characters and -, !, #, $, %, are allowed",
+                    Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
         }

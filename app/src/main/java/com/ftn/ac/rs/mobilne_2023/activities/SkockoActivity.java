@@ -126,6 +126,7 @@ public class SkockoActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
 
+            gameTimer.cancel();
             finish();
         });
 
