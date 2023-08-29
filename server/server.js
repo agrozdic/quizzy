@@ -3,15 +3,6 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 
-// model
-class KoZnaZnaAnswer {
-  constructor(correct, timeOf, player) {
-      this.correct = correct;
-      this.timeOf = timeOf;
-      this.player = player;
-  }
-}
-
 // inicijalizacija express-a i pravljenje servera
 const app = express();
 const server = http.createServer(app);
@@ -28,20 +19,28 @@ server.listen(port, '192.168.1.6', () => {
   console.log(`Server running on port ${port}`);
 });
 
+// model
+class KoZnaZnaAnswer {
+  constructor(correct, timeOf, player) {
+      this.correct = correct;
+      this.timeOf = timeOf;
+      this.player = player;
+  }
+}
+
 // podaci za igru
 let players = [];
 let playerSocket = {};
 let scores = {};
 let currentTurn = 0;
 let koZnaZnaAnswers = [];
+let switcher = 0;
 
 app.use(express.static('public'));
 
 // eventi
 io.on('connection', (socket) => {
   console.log('A user connected with socket id: ' + socket.id);
-
-  socket.emit('gameData', { currentTurn, scores });
 
   socket.on('joinGame', (playerName) => {
     if (players.length < 2) {
@@ -55,6 +54,33 @@ io.on('connection', (socket) => {
         io.emit('startGame', playerSocket);
       }
     }
+  });
+
+  // globalno za igre
+  socket.on('getTurn', () => {
+    if (switcher <= 2) {
+      if (currentTurn % 4 === 0) {
+        io.emit('turn', players[0]);
+        console.log(players[0] + ' turn');
+      }
+      if (currentTurn % 4 === 2) {
+        io.emit('turn', players[1]);
+        console.log(players[1] + ' turn');
+      }
+      currentTurn++;
+    }
+  });
+
+  socket.on('resetTurn', () => {
+    currentTurn = 0;
+  });
+
+  socket.on('getSwitcher', () => {
+    io.emit('switcher', ++switcher);
+  });
+
+  socket.on('resetSwitcher', () => {
+    switcher = 0;
   });
 
   // ko zna zna
@@ -104,6 +130,24 @@ io.on('connection', (socket) => {
       console.log(scores);
       koZnaZnaAnswers = [];
     }
+  });
+
+  // spojnice
+  socket.on('spojniceSolution', (solved) => {
+    io.emit('spojniceUpdate', solved);
+  });
+
+  socket.on('spojniceScoreUpdate', (player1, score1, player2, score2) => {
+    scores[player1] = score1;
+    scores[player2] = score2;
+
+    io.emit('scoreUpdate', scores);
+    console.log(scores);
+  });
+
+  socket.on('endSpojnice', () => {
+    io.emit('endSpojnice');
+    console.log('End of spojnice');
   });
 
   // diskonekcija
