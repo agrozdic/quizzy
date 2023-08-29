@@ -60,7 +60,7 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            playerScore = Integer.parseInt(bundle.getString("unreg-score"));
+            playerScore = bundle.getInt("unreg-score");
             round = bundle.getInt("round", 1);
         }
 
@@ -113,11 +113,11 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             public void onFinish() {
-                Toast.makeText(MojBrojActivity.this, "End of round", Toast.LENGTH_LONG).show();
+                Toast.makeText(MojBrojActivity.this, "End of round", Toast.LENGTH_SHORT).show();
                 if (round == 1) {
                     Intent intent = new Intent(MojBrojActivity.this, MojBrojActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("unreg-score", Integer.toString(playerScore));
+                    bundle.putInt("unreg-score",playerScore);
                     bundle.putInt("round", ++round);
                     intent.putExtras(bundle);
                     gameTimer.cancel();
@@ -125,7 +125,7 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     Intent intent = new Intent(MojBrojActivity.this, MainActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("unreg-score", Integer.toString(playerScore));
+                    bundle.putInt("unreg-score",playerScore);
                     bundle.remove("round");
                     intent.putExtras(bundle);
                     gameTimer.cancel();

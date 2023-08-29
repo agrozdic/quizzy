@@ -1,9 +1,11 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,21 +15,43 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.MainActivity;
 import com.ftn.ac.rs.mobilne_2023.R;
+import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
 import com.ftn.ac.rs.mobilne_2023.model.Spojnice;
 import com.ftn.ac.rs.mobilne_2023.services.SpojniceService;
 import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Iterator;
+
+import io.socket.client.Socket;
+
 public class SpojniceActivity extends AppCompatActivity {
+
+    public static Socket socket = SocketHandler.getSocket();;
+
+    private Bundle gameBundle;
 
     Spojnice spojniceModel;
 
     CountDownTimer gameTimer;
 
     int round;
+    int switcher;
 
     TextView player1ScoreView;
+    TextView player2ScoreView;
+    TextView player1NameView;
+    TextView player2NameView;
     int playerScore;
+    int player2Score;
+    int playerStartScore;
+    int player2StartScore;
+    String playerName;
+    String player2Name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +63,20 @@ public class SpojniceActivity extends AppCompatActivity {
                 false, R.id.headSpojnice);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            playerScore = Integer.parseInt(bundle.getString("unreg-score"));
-            round = bundle.getInt("round", 1);
+        gameBundle = bundle;
+        if (gameBundle != null && gameBundle.getString("user-username") == null) {
+            playerScore = bundle.getInt("unreg-score");
+        } else if (bundle != null) {
+            playerName = bundle.getString("user-username");
+            player2Name = bundle.getString("opponent-username");
+            playerScore = bundle.getInt("user-score");
+            playerStartScore = playerScore;
+            player2Score = bundle.getInt("opponent-score");
+            player2StartScore = player2Score;
         }
+        round = bundle.getInt("round", 1);
 
-        startGame();
+        startGame(playerName, playerScore, player2Name, player2Score);
     }
 
     @Override
@@ -71,47 +103,150 @@ public class SpojniceActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void startGame() {
+    private void startGame(String playerName, int playerScore, String player2Name, int player2Score) {
         SpojniceService.get(round, result -> {
             Log.println(Log.INFO, "Recieved data: ", result.toString());
             spojniceModel = new Spojnice(result);
 
-            player1ScoreView = findViewById(R.id.player1Score);
-            player1ScoreView.setText(Integer.toString(playerScore));
+            if (playerName == null) {
+                player1ScoreView = findViewById(R.id.player1Score);
+                player1ScoreView.setText(Integer.toString(playerScore));
+            } else {
+                player1ScoreView = findViewById(R.id.player1Score);
+                player1ScoreView.setText(Integer.toString(playerScore));
+                player2ScoreView = findViewById(R.id.player2Score);
+                player2ScoreView.setText(Integer.toString(player2Score));
+                player1NameView = findViewById(R.id.player1Name);
+                player1NameView.setText(playerName);
+                player2NameView = findViewById(R.id.player2Name);
+                player2NameView.setText(player2Name);
+            }
 
             loadControls();
-
+            if (player2Name != null)
+                blockInput();
             startTimer();
         });
     }
 
     private void startTimer() {
         TextView time = findViewById(R.id.time);
+        final int[] end = new int[1];
 
         gameTimer = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 time.setText(Long.toString(millisUntilFinished / 1000));
+                if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    socket.on("spojniceUpdate", args -> {
+                        String solved = args[0].toString();
+                        String[] solutions = solved.split(";");
+                        for (String solution: solutions) {
+                            if (!solution.equals("")) {
+                                runOnUiThread(() -> {
+                                    if (solution.contains("1a"))
+                                        pair1a.setEnabled(false);
+                                    if (solution.contains("2a"))
+                                        pair2a.setEnabled(false);
+                                    if (solution.contains("3a"))
+                                        pair3a.setEnabled(false);
+                                    if (solution.contains("4a"))
+                                        pair4a.setEnabled(false);
+                                    if (solution.contains("5a"))
+                                        pair5a.setEnabled(false);
+                                    if (solution.contains("1b"))
+                                        pair1b.setEnabled(false);
+                                    if (solution.contains("2b"))
+                                        pair2b.setEnabled(false);
+                                    if (solution.contains("3b"))
+                                        pair3b.setEnabled(false);
+                                    if (solution.contains("4b"))
+                                        pair4b.setEnabled(false);
+                                    if (solution.contains("5b"))
+                                        pair5b.setEnabled(false);
+                                });
+                            }
+                        }
+                        String currentPair = "";
+                        if (!pair5a.isEnabled())
+                            currentPair = "5a";
+                        if (!pair4a.isEnabled())
+                            currentPair = "4a";
+                        if (!pair3a.isEnabled())
+                            currentPair = "3a";
+                        if (!pair2a.isEnabled())
+                            currentPair = "2a";
+                        if (!pair1a.isEnabled())
+                            currentPair = "1a";
+                        progressGame(currentPair);
+                    });
+                    socket.on("scoreUpdate", args -> {
+                        if (args.length > 0 && args[0] instanceof JSONObject) {
+                            JSONObject data = (JSONObject) args[0];
+                            Log.println(Log.INFO, "args-score", Arrays.toString(args));
+                            try {
+                                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                                    String playerName = it.next();
+                                    if (playerName.equals(gameBundle.getString("user-username"))) {
+                                        playerScore = data.getInt(playerName);
+                                        runOnUiThread(() ->
+                                                player1ScoreView.setText(Integer.toString(playerScore)));
+                                    }
+                                    else if (playerName.equals(gameBundle.getString("opponent-username"))) {
+                                        player2Score = data.getInt(playerName);
+                                        runOnUiThread(() ->
+                                                player2ScoreView.setText(Integer.toString(player2Score)));
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    socket.on("endSpojnice", args -> {
+                        if (end[0] != 1) {
+                            gameTimer.onFinish();
+                            gameTimer.cancel();
+                        }
+                    });
+                }
             }
 
             public void onFinish() {
-                Toast.makeText(SpojniceActivity.this, "End of round", Toast.LENGTH_LONG).show();
+                end[0] = 1;
+                runOnUiThread(() -> {
+                    Toast.makeText(SpojniceActivity.this, "End of round", Toast.LENGTH_SHORT).show();
+                });
+                Intent intent;
+                Bundle bundle = new Bundle();
                 if (round == 1) {
-                    Intent intent = new Intent(SpojniceActivity.this, SpojniceActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("unreg-score", Integer.toString(playerScore));
+                    intent = new Intent(SpojniceActivity.this, SpojniceActivity.class);
+                    if (gameBundle != null && gameBundle.getString("user-username") == null) {
+                        bundle.putInt("unreg-score",playerScore);
+                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                        bundle.putString("user-username", playerName);
+                        bundle.putString("opponent-username", player2Name);
+                        bundle.putInt("user-score", playerScore);
+                        bundle.putInt("opponent-score", player2Score);
+                    }
                     bundle.putInt("round", ++round);
-                    intent.putExtras(bundle);
-                    gameTimer.cancel();
-                    startActivity(intent);
                 } else {
-                    Intent intent = new Intent(SpojniceActivity.this, AsocijacijeActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("unreg-score", Integer.toString(playerScore));
+                    socket.emit("endSpojnice");
+                    intent = new Intent(SpojniceActivity.this, AsocijacijeActivity.class);
+                    if (gameBundle != null && gameBundle.getString("user-username") == null) {
+                        bundle.putInt("unreg-score",playerScore);
+                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                        bundle.putString("user-username", playerName);
+                        bundle.putString("opponent-username", player2Name);
+                        bundle.putInt("user-score", playerScore);
+                        bundle.putInt("opponent-score", player2Score);
+                    }
                     bundle.remove("round");
-                    intent.putExtras(bundle);
-                    gameTimer.cancel();
-                    startActivity(intent);
                 }
+                intent.putExtras(bundle);
+                gameTimer.cancel();
+                socket.emit("resetTurn");
+                socket.emit("resetSwitcher");
+                startActivity(intent);
             }
         }.start();
     }
@@ -150,6 +285,26 @@ public class SpojniceActivity extends AppCompatActivity {
         pair5b.setOnClickListener(view -> checkSolution("5b"));
 
         loadData();
+    }
+
+    private void blockInput() {
+        socket.emit("getTurn");
+        socket.on("turn", args -> {
+            String username = args[0].toString();
+            runOnUiThread(() -> {
+                if (gameBundle.getString("user-username") != null &&
+                        username.equals(gameBundle.getString("user-username"))) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(this, "Inputs allowed. Your turn",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(this, "Your inputs are blocked. Wait for your turn",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     private void loadData() {
@@ -207,23 +362,54 @@ public class SpojniceActivity extends AppCompatActivity {
     }
 
     private void progressGame(String currentPair) {
-        switch (currentPair) {
-            case "1a":
-                pair2a.setEnabled(false);
-                break;
-            case "2a":
-                pair3a.setEnabled(false);
-                break;
-            case "3a":
-                pair4a.setEnabled(false);
-                break;
-            case "4a":
-                pair5a.setEnabled(false);
-                break;
-            case "5a":
-                gameTimer.onFinish();
-                gameTimer.cancel();
-                break;
-        }
+        runOnUiThread(() -> {
+            switch (currentPair) {
+                case "1a":
+                    pair2a.setEnabled(false);
+                    break;
+                case "2a":
+                    pair3a.setEnabled(false);
+                    break;
+                case "3a":
+                    pair4a.setEnabled(false);
+                    break;
+                case "4a":
+                    pair5a.setEnabled(false);
+                    break;
+                case "5a":
+                    if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                        socket.emit("getSwitcher");
+                        socket.on("switcher", args -> {
+                            switcher = Integer.parseInt(args[0].toString());
+                        });
+                        if (switcher == 2) {
+                            gameTimer.onFinish();
+                            gameTimer.cancel();
+                        } else {
+                            StringBuilder temp = new StringBuilder();
+                            for (String solution: spojniceModel.getSolutions()) {
+                                if (!pair1b.isEnabled() && solution.contains("1b"))
+                                    temp.append(solution).append(";");
+                                if (!pair2b.isEnabled() && solution.contains("2b"))
+                                    temp.append(solution).append(";");
+                                if (!pair3b.isEnabled() && solution.contains("3b"))
+                                    temp.append(solution).append(";");
+                                if (!pair4b.isEnabled() && solution.contains("4b"))
+                                    temp.append(solution).append(";");
+                                if (!pair5b.isEnabled() && solution.contains("5b"))
+                                    temp.append(solution).append(";");
+                            }
+                            String solved = temp.toString();
+                            socket.emit("spojniceSolution", solved);
+                            socket.emit("spojniceScoreUpdate", playerName, playerScore, player2Name, player2Score);
+                            blockInput();
+                        }
+                    } else {
+                        gameTimer.onFinish();
+                        gameTimer.cancel();
+                    }
+                    break;
+            }
+        });
     }
 }
