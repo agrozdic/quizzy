@@ -42,7 +42,7 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            playerScore = Integer.parseInt(bundle.getString("unreg-score"));
+            playerScore = bundle.getInt("unreg-score");
             round = bundle.getInt("round", 1);
         }
 
@@ -96,11 +96,11 @@ public class AsocijacijeActivity extends AppCompatActivity {
                 }
 
             public void onFinish() {
-                Toast.makeText(AsocijacijeActivity.this, "End of round", Toast.LENGTH_LONG).show();
+                Toast.makeText(AsocijacijeActivity.this, "End of round", Toast.LENGTH_SHORT).show();
                 if (round == 1) {
                     Intent intent = new Intent(AsocijacijeActivity.this, AsocijacijeActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("unreg-score", Integer.toString(playerScore));
+                    bundle.putInt("unreg-score",playerScore);
                     bundle.putInt("round", ++round);
                     intent.putExtras(bundle);
                     gameTimer.cancel();
@@ -108,7 +108,7 @@ public class AsocijacijeActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(AsocijacijeActivity.this, SkockoActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("unreg-score", Integer.toString(playerScore));
+                    bundle.putInt("unreg-score",playerScore);
                     bundle.remove("round");
                     intent.putExtras(bundle);
                     gameTimer.cancel();
