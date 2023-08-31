@@ -35,6 +35,7 @@ let scores = {};
 let currentTurn = 0;
 let koZnaZnaAnswers = [];
 let switcher = 0;
+let inverter = 0;
 
 app.use(express.static('public'));
 
@@ -58,17 +59,15 @@ io.on('connection', (socket) => {
 
   // globalno za igre
   socket.on('getTurn', () => {
-    if (switcher <= 2) {
-      if (currentTurn % 4 === 0) {
-        io.emit('turn', players[0]);
-        console.log(players[0] + ' turn');
-      }
-      if (currentTurn % 4 === 2) {
-        io.emit('turn', players[1]);
-        console.log(players[1] + ' turn');
-      }
-      currentTurn++;
-    }
+    const currentPlayerIndex = currentTurn % 4 === 0 ? (0 + inverter) : (1 - inverter);
+    const currentPlayer = players[currentPlayerIndex];
+    
+    io.emit('turn', currentPlayer);
+    console.log(currentPlayer + ' turn');
+    
+    setTimeout(() => {
+        currentTurn++;
+    }, 1000);
   });
 
   socket.on('resetTurn', () => {
@@ -81,6 +80,13 @@ io.on('connection', (socket) => {
 
   socket.on('resetSwitcher', () => {
     switcher = 0;
+  });
+
+  socket.on('invert', () => {
+    if (inverter === 0)
+      inverter = 1;
+    else
+      inverter = 0;
   });
 
   // ko zna zna
