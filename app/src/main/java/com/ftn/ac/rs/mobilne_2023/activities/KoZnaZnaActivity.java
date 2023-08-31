@@ -62,7 +62,7 @@ public class KoZnaZnaActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         gameBundle = bundle;
         if (bundle != null && bundle.getString("unreg-score") != null) {
-            playerScore = Integer.parseInt(bundle.getString("unreg-score"));
+            playerScore = bundle.getInt("unreg-score");
             round = bundle.getInt("round", 1);
         } else if (bundle != null) {
             playerName = bundle.getString("user-username");
@@ -129,11 +129,19 @@ public class KoZnaZnaActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Toast.makeText(KoZnaZnaActivity.this, "End of game", Toast.LENGTH_LONG).show();
+                Toast.makeText(KoZnaZnaActivity.this, "End of game", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(KoZnaZnaActivity.this, SpojniceActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("unreg-score", Integer.toString(playerScore));
-                bundle.remove("round");
+                if (gameBundle == null || gameBundle.getString("user-username") == null) {
+                    bundle.putInt("unreg-score",playerScore);
+                    Log.println(Log.INFO, "set-unreg", String.valueOf(playerScore));
+                    bundle.remove("round");
+                } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    bundle.putString("user-username", playerName);
+                    bundle.putString("opponent-username", player2Name);
+                    bundle.putInt("user-score", playerScore);
+                    bundle.putInt("opponent-score", player2Score);
+                }
                 intent.putExtras(bundle);
                 gameTimer.cancel();
                 startActivity(intent);
