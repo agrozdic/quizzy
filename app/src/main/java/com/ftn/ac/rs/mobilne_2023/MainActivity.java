@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Bundle userBundle;
 
+    private Button btnStartGame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnShowRankList = findViewById(R.id.btnRankList);
         Button btnShowProfile = findViewById(R.id.btnProfile);
-        Button btnStartGame = findViewById(R.id.btnStartGame);
+        btnStartGame = findViewById(R.id.btnStartGame);
         LinearLayout showFriendList = findViewById(R.id.showFriendList);
 
         btnShowRankList.setOnClickListener(view -> showRankList());
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void startGame() {
+        btnStartGame.setEnabled(false);
         if (userBundle != null && userBundle.getString("user-username") != null) {
             socket.emit("joinGame", userBundle.getString("user-username"));
             socket.on("startGame", args -> {

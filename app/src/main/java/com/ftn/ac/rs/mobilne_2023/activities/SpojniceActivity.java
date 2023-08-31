@@ -177,6 +177,11 @@ public class SpojniceActivity extends AppCompatActivity {
                             currentPair = "2a";
                         if (!pair1a.isEnabled())
                             currentPair = "1a";
+                        if ((pair1a.isEnabled() && pair2a.isEnabled() && pair3a.isEnabled()
+                                && pair4a.isEnabled() && pair5a.isEnabled()) ||
+                                pair1a.isEnabled()) {
+                            currentPair = "0a";
+                        }
                         progressGame(currentPair);
                     });
                     socket.on("scoreUpdate", args -> {
@@ -227,6 +232,16 @@ public class SpojniceActivity extends AppCompatActivity {
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
                         bundle.putInt("opponent-score", player2Score);
+
+                        // sansa da imaju isti rezultat posle ko zna zna i 1 runde spojnica
+                        // (u teoriji) je oko 0.85%
+                        // ako imaju isti rezultat, gleda se duzina imena, ako je i to isto (0.425%)
+                        // onda svaka cast
+                        if (playerScore > player2Score
+                                || (playerScore == player2Score &&
+                                    playerName.length() > player2Name.length())) {
+                            socket.emit("invert");
+                        }
                     }
                     bundle.putInt("round", ++round);
                 } else {
@@ -276,8 +291,6 @@ public class SpojniceActivity extends AppCompatActivity {
         pair4b = findViewById(R.id.pair4bSpojnice);
         pair5b = findViewById(R.id.pair5bSpojnice);
 
-        pair1a.setEnabled(false);
-
         pair1b.setOnClickListener(view -> checkSolution("1b"));
         pair2b.setOnClickListener(view -> checkSolution("2b"));
         pair3b.setOnClickListener(view -> checkSolution("3b"));
@@ -297,6 +310,7 @@ public class SpojniceActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     Toast.makeText(this, "Inputs allowed. Your turn",
                             Toast.LENGTH_SHORT).show();
+                    progressGame("0a");
                 } else {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -364,6 +378,9 @@ public class SpojniceActivity extends AppCompatActivity {
     private void progressGame(String currentPair) {
         runOnUiThread(() -> {
             switch (currentPair) {
+                case "0a":
+                    pair1a.setEnabled(false);
+                    break;
                 case "1a":
                     pair2a.setEnabled(false);
                     break;
@@ -381,6 +398,7 @@ public class SpojniceActivity extends AppCompatActivity {
                         socket.emit("getSwitcher");
                         socket.on("switcher", args -> {
                             switcher = Integer.parseInt(args[0].toString());
+                            Log.println(Log.INFO, "swithcer -> ", Integer.toString(switcher));
                         });
                         if (switcher == 2) {
                             gameTimer.onFinish();
