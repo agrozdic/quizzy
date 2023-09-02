@@ -48,10 +48,10 @@ public class SpojniceActivity extends AppCompatActivity {
     TextView player2NameView;
     int playerScore;
     int player2Score;
-    int playerStartScore;
-    int player2StartScore;
     String playerName;
     String player2Name;
+
+    boolean twoPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +70,10 @@ public class SpojniceActivity extends AppCompatActivity {
             playerName = bundle.getString("user-username");
             player2Name = bundle.getString("opponent-username");
             playerScore = bundle.getInt("user-score");
-            playerStartScore = playerScore;
             player2Score = bundle.getInt("opponent-score");
-            player2StartScore = player2Score;
         }
         round = bundle.getInt("round", 1);
+        twoPlayer = (gameBundle != null && gameBundle.getString("user-username") != null);
 
         startGame(playerName, playerScore, player2Name, player2Score);
     }
@@ -138,7 +137,7 @@ public class SpojniceActivity extends AppCompatActivity {
         gameTimer = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 time.setText(Long.toString(millisUntilFinished / 1000));
-                if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                if (twoPlayer) {
                     socket.on("spojniceUpdate", args -> {
                         String solved = args[0].toString();
                         String[] solutions = solved.split(";");
@@ -229,7 +228,7 @@ public class SpojniceActivity extends AppCompatActivity {
                     intent = new Intent(SpojniceActivity.this, SpojniceActivity.class);
                     if (gameBundle != null && gameBundle.getString("user-username") == null) {
                         bundle.putInt("unreg-score",playerScore);
-                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    } else if (twoPlayer) {
                         bundle.putString("user-username", playerName);
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
@@ -250,7 +249,7 @@ public class SpojniceActivity extends AppCompatActivity {
                     intent = new Intent(SpojniceActivity.this, AsocijacijeActivity.class);
                     if (gameBundle != null && gameBundle.getString("user-username") == null) {
                         bundle.putInt("unreg-score",playerScore);
-                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    } else if (twoPlayer) {
                         socket.emit("endSpojnice");
 
                         bundle.putString("user-username", playerName);
@@ -263,9 +262,14 @@ public class SpojniceActivity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 gameTimer.cancel();
 
-                if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                if (twoPlayer) {
                     socket.emit("resetTurn");
                     socket.emit("resetSwitcher");
+                    if (playerScore > player2Score
+                            || (playerScore == player2Score &&
+                            playerName.length() > player2Name.length())) {
+                        socket.emit("invert");
+                    }
                 }
 
                 startActivity(intent);
@@ -401,11 +405,10 @@ public class SpojniceActivity extends AppCompatActivity {
                     pair5a.setEnabled(false);
                     break;
                 case "5a":
-                    if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    if (twoPlayer) {
                         socket.emit("getSwitcher");
                         socket.on("switcher", args -> {
                             switcher = Integer.parseInt(args[0].toString());
-                            Log.println(Log.INFO, "swithcer -> ", Integer.toString(switcher));
                         });
                         if (switcher == 2) {
                             gameTimer.onFinish();
