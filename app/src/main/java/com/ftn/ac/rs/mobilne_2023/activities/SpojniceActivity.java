@@ -125,6 +125,8 @@ public class SpojniceActivity extends AppCompatActivity {
             loadControls();
             if (player2Name != null)
                 blockInput();
+            else
+                progressGame("0a");
             startTimer();
         });
     }
@@ -245,11 +247,12 @@ public class SpojniceActivity extends AppCompatActivity {
                     }
                     bundle.putInt("round", ++round);
                 } else {
-                    socket.emit("endSpojnice");
                     intent = new Intent(SpojniceActivity.this, AsocijacijeActivity.class);
                     if (gameBundle != null && gameBundle.getString("user-username") == null) {
                         bundle.putInt("unreg-score",playerScore);
                     } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                        socket.emit("endSpojnice");
+
                         bundle.putString("user-username", playerName);
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
@@ -259,8 +262,12 @@ public class SpojniceActivity extends AppCompatActivity {
                 }
                 intent.putExtras(bundle);
                 gameTimer.cancel();
-                socket.emit("resetTurn");
-                socket.emit("resetSwitcher");
+
+                if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    socket.emit("resetTurn");
+                    socket.emit("resetSwitcher");
+                }
+
                 startActivity(intent);
             }
         }.start();
