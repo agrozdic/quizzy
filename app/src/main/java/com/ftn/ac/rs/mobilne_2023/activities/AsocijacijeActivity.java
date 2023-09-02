@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,21 +16,70 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.MainActivity;
 import com.ftn.ac.rs.mobilne_2023.R;
+import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
 import com.ftn.ac.rs.mobilne_2023.model.Asocijacije;
 import com.ftn.ac.rs.mobilne_2023.services.AsocijacijeService;
 import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.Iterator;
+
+import io.socket.client.Socket;
+
 public class AsocijacijeActivity extends AppCompatActivity {
+
+    public static Socket socket = SocketHandler.getSocket();;
+
+    private Bundle gameBundle;
 
     Asocijacije asocijacijeModel;
 
     CountDownTimer gameTimer;
 
     int round;
+    int switcher;
+    int clicker = 1;
 
     TextView player1ScoreView;
+    TextView player2ScoreView;
+    TextView player1NameView;
+    TextView player2NameView;
     int playerScore;
+    int player2Score;
+    String playerName;
+    String player2Name;
+
+    Button a1;
+    Button a2;
+    Button a3;
+    Button a4;
+    EditText a5;
+
+    Button b1;
+    Button b2;
+    Button b3;
+    Button b4;
+    EditText b5;
+
+    Button c1;
+    Button c2;
+    Button c3;
+    Button c4;
+    EditText c5;
+
+    Button d1;
+    Button d2;
+    Button d3;
+    Button d4;
+    EditText d5;
+
+    EditText konacno;
+
+    boolean twoPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +91,19 @@ public class AsocijacijeActivity extends AppCompatActivity {
                 false, R.id.headAsocijacije);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
+        gameBundle = bundle;
+        if (gameBundle != null && gameBundle.getString("user-username") == null) {
             playerScore = bundle.getInt("unreg-score");
-            round = bundle.getInt("round", 1);
+        } else if (bundle != null) {
+            playerName = bundle.getString("user-username");
+            player2Name = bundle.getString("opponent-username");
+            playerScore = bundle.getInt("user-score");
+            player2Score = bundle.getInt("opponent-score");
         }
+        round = bundle.getInt("round", 1);
+        twoPlayer = (gameBundle != null && gameBundle.getString("user-username") != null);
 
-        startGame();
+        startGame(playerName, playerScore, player2Name, player2Score);
     }
 
     @Override
@@ -73,15 +130,28 @@ public class AsocijacijeActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void startGame() {
+    private void startGame(String playerName, int playerScore, String player2Name, int player2Score) {
         AsocijacijeService.get(round, result -> {
             Log.println(Log.INFO, "Recieved data: ", result.toString());
             asocijacijeModel = new Asocijacije(result);
 
-            player1ScoreView = findViewById(R.id.player1Score);
-            player1ScoreView.setText(Integer.toString(playerScore));
+            if (playerName == null) {
+                player1ScoreView = findViewById(R.id.player1Score);
+                player1ScoreView.setText(Integer.toString(playerScore));
+            } else {
+                player1ScoreView = findViewById(R.id.player1Score);
+                player1ScoreView.setText(Integer.toString(playerScore));
+                player2ScoreView = findViewById(R.id.player2Score);
+                player2ScoreView.setText(Integer.toString(player2Score));
+                player1NameView = findViewById(R.id.player1Name);
+                player1NameView.setText(playerName);
+                player2NameView = findViewById(R.id.player2Name);
+                player2NameView.setText(player2Name);
+            }
 
             loadData();
+            if (player2Name != null)
+                blockInput();
 
             startTimer();
         });
@@ -89,60 +159,336 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
     private void startTimer() {
         TextView time = findViewById(R.id.time);
+        final int[] end = new int[1];
 
         gameTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
                     time.setText(Long.toString(millisUntilFinished / 1000));
+                if (twoPlayer) {
+                    socket.on("asocijacijeOpen", args -> {
+                       String opened = args[0].toString(); // jedno polje
+                       runOnUiThread(() -> {
+                           switch (opened) {
+                               case "a1":
+                                   a1.setText(asocijacijeModel.getA1());
+                                   a1.setEnabled(false);
+                                   break;
+                               case "a2":
+                                   a2.setText(asocijacijeModel.getA2());
+                                   a2.setEnabled(false);
+                                   break;
+                               case "a3":
+                                   a3.setText(asocijacijeModel.getA3());
+                                   a3.setEnabled(false);
+                                   break;
+                               case "a4":
+                                   a4.setText(asocijacijeModel.getA4());
+                                   a4.setEnabled(false);
+                                   break;
+                               case "b1":
+                                   b1.setText(asocijacijeModel.getB1());
+                                   b1.setEnabled(false);
+                                   break;
+                               case "b2":
+                                   b2.setText(asocijacijeModel.getB2());
+                                   b2.setEnabled(false);
+                                   break;
+                               case "b3":
+                                   b3.setText(asocijacijeModel.getB3());
+                                   b3.setEnabled(false);
+                                   break;
+                               case "b4":
+                                   b4.setText(asocijacijeModel.getB4());
+                                   b4.setEnabled(false);
+                                   break;
+                               case "c1":
+                                   c1.setText(asocijacijeModel.getC1());
+                                   c1.setEnabled(false);
+                                   break;
+                               case "c2":
+                                   c2.setText(asocijacijeModel.getC2());
+                                   c2.setEnabled(false);
+                                   break;
+                               case "c3":
+                                   c3.setText(asocijacijeModel.getC3());
+                                   c3.setEnabled(false);
+                                   break;
+                               case "c4":
+                                   c4.setText(asocijacijeModel.getC4());
+                                   c4.setEnabled(false);
+                                   break;
+                               case "d1":
+                                   d1.setText(asocijacijeModel.getD1());
+                                   d1.setEnabled(false);
+                                   break;
+                               case "d2":
+                                   d2.setText(asocijacijeModel.getD2());
+                                   d2.setEnabled(false);
+                                   break;
+                               case "d3":
+                                   d3.setText(asocijacijeModel.getD3());
+                                   d3.setEnabled(false);
+                                   break;
+                               case "d4":
+                                   d4.setText(asocijacijeModel.getD4());
+                                   d4.setEnabled(false);
+                                   break;
+                           }
+                       });
+                    });
+                    socket.on("asocijacijeSolved", args -> {
+                        String solved = args[0].toString(); // samo jedno konacno
+                        runOnUiThread(() -> {
+                            switch (solved) {
+                                case "a5":
+                                    a1.setText(asocijacijeModel.getA1());
+                                    a1.setEnabled(false);
+                                    a2.setText(asocijacijeModel.getA2());
+                                    a2.setEnabled(false);
+                                    a3.setText(asocijacijeModel.getA3());
+                                    a3.setEnabled(false);
+                                    a4.setText(asocijacijeModel.getA4());
+                                    a4.setEnabled(false);
+                                    a5.setText(asocijacijeModel.getA5());
+                                    a5.setEnabled(false);
+                                    break;
+                                case "b5":
+                                    b1.setText(asocijacijeModel.getB1());
+                                    b1.setEnabled(false);
+                                    b2.setText(asocijacijeModel.getB2());
+                                    b2.setEnabled(false);
+                                    b3.setText(asocijacijeModel.getB3());
+                                    b3.setEnabled(false);
+                                    b4.setText(asocijacijeModel.getB4());
+                                    b4.setEnabled(false);
+                                    b5.setText(asocijacijeModel.getB5());
+                                    b5.setEnabled(false);
+                                    break;
+                                case "c5":
+                                    c1.setText(asocijacijeModel.getC1());
+                                    c1.setEnabled(false);
+                                    c2.setText(asocijacijeModel.getC2());
+                                    c2.setEnabled(false);
+                                    c3.setText(asocijacijeModel.getC3());
+                                    c3.setEnabled(false);
+                                    c4.setText(asocijacijeModel.getC4());
+                                    c4.setEnabled(false);
+                                    c5.setText(asocijacijeModel.getC5());
+                                    c5.setEnabled(false);
+                                    break;
+                                case "d5":
+                                    d1.setText(asocijacijeModel.getD1());
+                                    d1.setEnabled(false);
+                                    d2.setText(asocijacijeModel.getD2());
+                                    d2.setEnabled(false);
+                                    d3.setText(asocijacijeModel.getD3());
+                                    d3.setEnabled(false);
+                                    d4.setText(asocijacijeModel.getD4());
+                                    d4.setEnabled(false);
+                                    d5.setText(asocijacijeModel.getD5());
+                                    d5.setEnabled(false);
+                                    break;
+                                case "konacno":
+                                    a1.setText(asocijacijeModel.getA1());
+                                    a1.setEnabled(false);
+                                    a2.setText(asocijacijeModel.getA2());
+                                    a2.setEnabled(false);
+                                    a3.setText(asocijacijeModel.getA3());
+                                    a3.setEnabled(false);
+                                    a4.setText(asocijacijeModel.getA4());
+                                    a4.setEnabled(false);
+                                    a5.setText(asocijacijeModel.getA5());
+                                    a5.setEnabled(false);
+                                    b1.setText(asocijacijeModel.getB1());
+                                    b1.setEnabled(false);
+                                    b2.setText(asocijacijeModel.getB2());
+                                    b2.setEnabled(false);
+                                    b3.setText(asocijacijeModel.getB3());
+                                    b3.setEnabled(false);
+                                    b4.setText(asocijacijeModel.getB4());
+                                    b4.setEnabled(false);
+                                    b5.setText(asocijacijeModel.getB5());
+                                    b5.setEnabled(false);
+                                    c1.setText(asocijacijeModel.getC1());
+                                    c1.setEnabled(false);
+                                    c2.setText(asocijacijeModel.getC2());
+                                    c2.setEnabled(false);
+                                    c3.setText(asocijacijeModel.getC3());
+                                    c3.setEnabled(false);
+                                    c4.setText(asocijacijeModel.getC4());
+                                    c4.setEnabled(false);
+                                    c5.setText(asocijacijeModel.getC5());
+                                    c5.setEnabled(false);
+                                    d1.setText(asocijacijeModel.getD1());
+                                    d1.setEnabled(false);
+                                    d2.setText(asocijacijeModel.getD2());
+                                    d2.setEnabled(false);
+                                    d3.setText(asocijacijeModel.getD3());
+                                    d3.setEnabled(false);
+                                    d4.setText(asocijacijeModel.getD4());
+                                    d4.setEnabled(false);
+                                    d5.setText(asocijacijeModel.getD5());
+                                    d5.setEnabled(false);
+                                    break;
+                            }
+                        });
+                    });
+                    socket.on("scoreUpdate", args -> {
+                        if (args.length > 0 && args[0] instanceof JSONObject) {
+                            JSONObject data = (JSONObject) args[0];
+                            Log.println(Log.INFO, "args-score", Arrays.toString(args));
+                            try {
+                                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                                    String playerName = it.next();
+                                    if (playerName.equals(gameBundle.getString("user-username"))) {
+                                        playerScore = data.getInt(playerName);
+                                        runOnUiThread(() ->
+                                                player1ScoreView.setText(Integer.toString(playerScore)));
+                                    }
+                                    else if (playerName.equals(gameBundle.getString("opponent-username"))) {
+                                        player2Score = data.getInt(playerName);
+                                        runOnUiThread(() ->
+                                                player2ScoreView.setText(Integer.toString(player2Score)));
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    socket.on("endAsocijacije", args -> {
+                        if (end[0] != 1) {
+                            gameTimer.onFinish();
+                            gameTimer.cancel();
+                        }
+                    });
                 }
+            }
 
             public void onFinish() {
-                Toast.makeText(AsocijacijeActivity.this, "End of round", Toast.LENGTH_SHORT).show();
+                end[0] = 1;
+                runOnUiThread(() -> {
+                    Toast.makeText(AsocijacijeActivity.this, "End of round", Toast.LENGTH_SHORT).show();
+                });
+                Intent intent;
+                Bundle bundle = new Bundle();
                 if (round == 1) {
-                    Intent intent = new Intent(AsocijacijeActivity.this, AsocijacijeActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("unreg-score",playerScore);
+                    intent = new Intent(AsocijacijeActivity.this, AsocijacijeActivity.class);
+                    if (gameBundle != null && gameBundle.getString("user-username") == null) {
+                        bundle.putInt("unreg-score",playerScore);
+                    } else if (twoPlayer) {
+                        bundle.putString("user-username", playerName);
+                        bundle.putString("opponent-username", player2Name);
+                        bundle.putInt("user-score", playerScore);
+                        bundle.putInt("opponent-score", player2Score);
+
+                        if (playerScore > player2Score
+                                || (playerScore == player2Score &&
+                                playerName.length() > player2Name.length())) {
+                            socket.emit("invert");
+                        }
+                    }
                     bundle.putInt("round", ++round);
-                    intent.putExtras(bundle);
-                    gameTimer.cancel();
-                    startActivity(intent);
                 } else {
-                    Intent intent = new Intent(AsocijacijeActivity.this, SkockoActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("unreg-score",playerScore);
+                    intent = new Intent(AsocijacijeActivity.this, SkockoActivity.class);
+                    if (gameBundle != null && gameBundle.getString("user-username") == null) {
+                        bundle.putInt("unreg-score",playerScore);
+                    } else if (twoPlayer) {
+                        socket.emit("endAsocijacije");
+
+                        bundle.putString("user-username", playerName);
+                        bundle.putString("opponent-username", player2Name);
+                        bundle.putInt("user-score", playerScore);
+                        bundle.putInt("opponent-score", player2Score);
+                    }
                     bundle.remove("round");
-                    intent.putExtras(bundle);
-                    gameTimer.cancel();
-                    startActivity(intent);
                 }
+                intent.putExtras(bundle);
+                gameTimer.cancel();
+
+                if (twoPlayer) {
+                    socket.emit("resetTurn");
+                    socket.emit("resetSwitcher");
+                }
+
+                startActivity(intent);
             }
         }.start();
     }
 
     private void loadData() {
-        Button a1 = findViewById(R.id.a1Asocijacije);
-        Button a2 = findViewById(R.id.a2Asocijacije);
-        Button a3 = findViewById(R.id.a3Asocijacije);
-        Button a4 = findViewById(R.id.a4Asocijacije);
-        EditText a5 = findViewById(R.id.aKolAsocijacije);
+        a1 = findViewById(R.id.a1Asocijacije);
+        a2 = findViewById(R.id.a2Asocijacije);
+        a3 = findViewById(R.id.a3Asocijacije);
+        a4 = findViewById(R.id.a4Asocijacije);
+        a5 = findViewById(R.id.aKolAsocijacije);
+
+        b1 = findViewById(R.id.b1Asocijacije);
+        b2 = findViewById(R.id.b2Asocijacije);
+        b3 = findViewById(R.id.b3Asocijacije);
+        b4 = findViewById(R.id.b4Asocijacije);
+        b5 = findViewById(R.id.bKolAsocijacije);
+
+        c1 = findViewById(R.id.c1Asocijacije);
+        c2 = findViewById(R.id.c2Asocijacije);
+        c3 = findViewById(R.id.c3Asocijacije);
+        c4 = findViewById(R.id.c4Asocijacije);
+        c5 = findViewById(R.id.cKolAsocijacije);
+
+        d1 = findViewById(R.id.d1Asocijacije);
+        d2 = findViewById(R.id.d2Asocijacije);
+        d3 = findViewById(R.id.d3Asocijacije);
+        d4 = findViewById(R.id.d4Asocijacije);
+        d5 = findViewById(R.id.dKolAsocijacije);
+
+        konacno = findViewById(R.id.konacnoAsocijacije);
 
         a1.setOnClickListener(view -> {
-            a1.setText(asocijacijeModel.getA1());
-            a1.setEnabled(false);
+            if (clicker == 1) {
+                a1.setText(asocijacijeModel.getA1());
+                a1.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "a1");
+
+                clicker--;
+            }
         });
 
         a2.setOnClickListener(view -> {
-            a2.setText(asocijacijeModel.getA2());
-            a2.setEnabled(false);
+            if (clicker == 1) {
+                a2.setText(asocijacijeModel.getA2());
+                a2.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "a2");
+
+                clicker--;
+            }
         });
 
         a3.setOnClickListener(view -> {
-            a3.setText(asocijacijeModel.getA3());
-            a3.setEnabled(false);
+            if (clicker == 1) {
+                a3.setText(asocijacijeModel.getA3());
+                a3.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "a3");
+
+                clicker--;
+            }
         });
 
         a4.setOnClickListener(view -> {
-            a4.setText(asocijacijeModel.getA4());
-            a4.setEnabled(false);
+            if (clicker == 1) {
+                a4.setText(asocijacijeModel.getA4());
+                a4.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "a4");
+
+                clicker--;
+            }
         });
 
         a5.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -180,38 +526,68 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
                     a5.setEnabled(false);
 
+                    if (twoPlayer) {
+                        socket.emit("asocijacijeSolution", "a5");
+                        socket.emit("asocijacijeScoreUpdate", playerName, playerScore, player2Name, player2Score);
+                    }
+
                     return true;
                 } else {
                     Toast.makeText(AsocijacijeActivity.this, "Wrong guess", Toast.LENGTH_SHORT).show();
+                    if (twoPlayer)
+                        blockInput();
                 }
+                clicker++;
             }
             return false;
         });
 
-        Button b1 = findViewById(R.id.b1Asocijacije);
-        Button b2 = findViewById(R.id.b2Asocijacije);
-        Button b3 = findViewById(R.id.b3Asocijacije);
-        Button b4 = findViewById(R.id.b4Asocijacije);
-        EditText b5 = findViewById(R.id.bKolAsocijacije);
-
         b1.setOnClickListener(view -> {
-            b1.setText(asocijacijeModel.getB1());
-            b1.setEnabled(false);
+            if (clicker == 1) {
+                b1.setText(asocijacijeModel.getB1());
+                b1.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "b1");
+
+                clicker--;
+            }
         });
 
         b2.setOnClickListener(view -> {
-            b2.setText(asocijacijeModel.getB2());
-            b2.setEnabled(false);
+            if (clicker == 1) {
+                b2.setText(asocijacijeModel.getB2());
+                b2.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "b2");
+
+                clicker--;
+            }
         });
 
         b3.setOnClickListener(view -> {
-            b3.setText(asocijacijeModel.getB3());
-            b3.setEnabled(false);
+            if (clicker == 1) {
+                b3.setText(asocijacijeModel.getB3());
+                b3.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "b3");
+
+                clicker--;
+            }
         });
 
         b4.setOnClickListener(view -> {
-            b4.setText(asocijacijeModel.getB4());
-            b4.setEnabled(false);
+            if (clicker == 1) {
+                b4.setText(asocijacijeModel.getB4());
+                b4.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "b4");
+
+                clicker--;
+            }
         });
 
         b5.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -249,38 +625,68 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
                     b5.setEnabled(false);
 
+                    if (twoPlayer) {
+                        socket.emit("asocijacijeSolution", "b5");
+                        socket.emit("asocijacijeScoreUpdate", playerName, playerScore, player2Name, player2Score);
+                    }
+
                     return true;
                 } else {
                     Toast.makeText(AsocijacijeActivity.this, "Wrong guess", Toast.LENGTH_SHORT).show();
+                    if (twoPlayer)
+                        blockInput();
                 }
+                clicker++;
             }
             return false;
         });
 
-        Button c1 = findViewById(R.id.c1Asocijacije);
-        Button c2 = findViewById(R.id.c2Asocijacije);
-        Button c3 = findViewById(R.id.c3Asocijacije);
-        Button c4 = findViewById(R.id.c4Asocijacije);
-        EditText c5 = findViewById(R.id.cKolAsocijacije);
-
         c1.setOnClickListener(view -> {
-            c1.setText(asocijacijeModel.getC1());
-            c1.setEnabled(false);
+            if (clicker == 1) {
+                c1.setText(asocijacijeModel.getC1());
+                c1.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "c1");
+
+                clicker--;
+            }
         });
 
         c2.setOnClickListener(view -> {
-            c2.setText(asocijacijeModel.getC2());
-            c2.setEnabled(false);
+            if (clicker == 1) {
+                c2.setText(asocijacijeModel.getC2());
+                c2.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "c2");
+
+                clicker--;
+            }
         });
 
         c3.setOnClickListener(view -> {
-            c3.setText(asocijacijeModel.getC3());
-            c3.setEnabled(false);
+            if (clicker == 1) {
+                c3.setText(asocijacijeModel.getC3());
+                c3.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "c3");
+
+                clicker--;
+            }
         });
 
         c4.setOnClickListener(view -> {
-            c4.setText(asocijacijeModel.getC4());
-            c4.setEnabled(false);
+            if (clicker == 1) {
+                c4.setText(asocijacijeModel.getC4());
+                c4.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "c4");
+
+                clicker--;
+            }
         });
 
         c5.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -318,38 +724,68 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
                     c5.setEnabled(false);
 
+                    if (twoPlayer) {
+                        socket.emit("asocijacijeSolution", "c5");
+                        socket.emit("asocijacijeScoreUpdate", playerName, playerScore, player2Name, player2Score);
+                    }
+
                     return true;
                 } else {
                     Toast.makeText(AsocijacijeActivity.this, "Wrong guess", Toast.LENGTH_SHORT).show();
+                    if (twoPlayer)
+                        blockInput();
                 }
+                clicker++;
             }
             return false;
         });
 
-        Button d1 = findViewById(R.id.d1Asocijacije);
-        Button d2 = findViewById(R.id.d2Asocijacije);
-        Button d3 = findViewById(R.id.d3Asocijacije);
-        Button d4 = findViewById(R.id.d4Asocijacije);
-        EditText d5 = findViewById(R.id.dKolAsocijacije);
-
         d1.setOnClickListener(view -> {
-            d1.setText(asocijacijeModel.getD1());
-            d1.setEnabled(false);
+            if (clicker == 1) {
+                d1.setText(asocijacijeModel.getD1());
+                d1.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "d1");
+
+                clicker--;
+            }
         });
 
         d2.setOnClickListener(view -> {
-            d2.setText(asocijacijeModel.getD2());
-            d2.setEnabled(false);
+            if (clicker == 1) {
+                d2.setText(asocijacijeModel.getD2());
+                d2.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "d2");
+
+                clicker--;
+            }
         });
 
         d3.setOnClickListener(view -> {
-            d3.setText(asocijacijeModel.getD3());
-            d3.setEnabled(false);
+            if (clicker == 1) {
+                d3.setText(asocijacijeModel.getD3());
+                d3.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "d3");
+
+                clicker--;
+            }
         });
 
         d4.setOnClickListener(view -> {
-            d4.setText(asocijacijeModel.getD4());
-            d4.setEnabled(false);
+            if (clicker == 1) {
+                d4.setText(asocijacijeModel.getD4());
+                d4.setEnabled(false);
+
+                if (twoPlayer)
+                    socket.emit("asocijacijeOpened", "d4");
+
+                clicker--;
+            }
         });
 
         d5.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -387,15 +823,21 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
                     d5.setEnabled(false);
 
+                    if (twoPlayer) {
+                        socket.emit("asocijacijeSolution", "d5");
+                        socket.emit("asocijacijeScoreUpdate", playerName, playerScore, player2Name, player2Score);
+                    }
+
                     return true;
                 } else {
                     Toast.makeText(AsocijacijeActivity.this, "Wrong guess", Toast.LENGTH_SHORT).show();
+                    if (twoPlayer)
+                        blockInput();
                 }
+                clicker++;
             }
             return false;
         });
-
-        EditText konacno = findViewById(R.id.konacnoAsocijacije);
 
         konacno.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
@@ -528,12 +970,42 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
                     konacno.setEnabled(false);
 
+                    if (twoPlayer) {
+                        socket.emit("asocijacijeSolution", "konacno");
+                        socket.emit("asocijacijeScoreUpdate", playerName, playerScore, player2Name, player2Score);
+                    }
+
                     gameTimer.onFinish();
 
                     return true;
+                } else {
+                    Toast.makeText(this, "Wrong guess", Toast.LENGTH_SHORT).show();
+                    if (twoPlayer)
+                        blockInput();
+                    clicker = 1;
                 }
             }
             return false;
+        });
+    }
+
+    private void blockInput() {
+        socket.emit("getTurn");
+        socket.on("turn", args -> {
+            String username = args[0].toString();
+            runOnUiThread(() -> {
+                if (gameBundle.getString("user-username") != null &&
+                        username.equals(gameBundle.getString("user-username"))) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(this, "Inputs allowed. Your turn",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(this, "Your inputs are blocked. Wait for your turn",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 }

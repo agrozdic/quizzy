@@ -156,6 +156,28 @@ io.on('connection', (socket) => {
     console.log('End of spojnice');
   });
 
+  // asocijacije
+  socket.on('asocijacijeOpened', (field) => {
+    io.emit('asocijacijeOpen', field);
+  });
+
+  socket.on('asocijacijeSolution', (solved) => {
+    io.emit('asocijacijeSolved', solved);
+  });
+
+  socket.on('asocijacijeScoreUpdate', (player1, score1, player2, score2) => {
+    scores[player1] = score1;
+    scores[player2] = score2;
+
+    io.emit('scoreUpdate', scores);
+    console.log(scores);
+  });
+
+  socket.on('endAsocijacije', () => {
+    io.emit('endAsocijacije');
+    console.log('End of asocijacije');
+  });
+
   // diskonekcija
   socket.on('disconnect', () => {
     console.log('A user disconnected');
