@@ -1,9 +1,14 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,15 +25,19 @@ import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-public class MojBrojActivity extends AppCompatActivity implements View.OnClickListener {
+public class MojBrojActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener {
 
     private Button btnResenje1;
     private Button btnResenje2;
     private Button btnResenje;
     private Button btnStop;
     private TextView txtResenje;
+    private ArrayList<Button> arrResenje = new ArrayList<Button>();
     private Button btnDel;
     private Button btnConfirm;
     private Button btnBr1;
@@ -44,10 +53,24 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnOpenBracket;
     private Button btnClosedBracket;
 
+    private int globalBr = -1;
+
     private CountDownTimer gameTimer;
     private int round;
     private TextView player1ScoreView;
     private int playerScore;
+
+    // senzori
+
+    SensorManager sensorManager;
+
+    TextView tvAccelerometer;
+    TextView tvLinearAccelerometer;
+    TextView tvMagneticField;
+    TextView tvProximitySensor;
+    TextView tvGyroscope;
+
+    // senzori
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +91,19 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
 
         Handler handler = new Handler();
         handler.postDelayed(() -> startGame(), 1000); // nasty hack
+
+        // senzori
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+//        tvAccelerometer = (TextView) findViewById(R.id.tvAccelerometar);
+//        tvLinearAccelerometer = (TextView) findViewById(R.id.tvLinearAccelerometer);
+//        tvMagneticField = (TextView) findViewById(R.id.tvMagneticField);
+//        tvProximitySensor = (TextView) findViewById(R.id.tvProximitySensor);
+//        tvGyroscope = (TextView) findViewById(R.id.tvGyroscope);
+
+        // senzori
+
     }
 
     @Override
@@ -198,6 +234,7 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnStopMB:
+                globalBr++;
                 btnStopLogic();
                 break;
             case R.id.btnConfirmMB:
@@ -224,48 +261,71 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void btnStopLogic() {
-        btnStop.setEnabled(false);
-        btnConfirm.setEnabled(true);
+        System.out.println("globalbr === " + globalBr);
+        if(globalBr == 6) {
+            btnStop.setEnabled(false);
+            btnConfirm.setEnabled(true);
+            txtResenje.setEnabled(true);
+            btnDel.setEnabled(true);
+        }
 
-        int num = new Random().nextInt(1000);
-        btnResenje.setText(String.valueOf(num));
-        txtResenje.setEnabled(true);
-        btnDel.setEnabled(true);
+        int num;
 
-        num = new Random().nextInt(8) + 1;
-        btnBr1.setText(String.valueOf(num));
-        btnBr1.setEnabled(true);
+        if(globalBr == 0) {
+            num = new Random().nextInt(1000);
+            btnResenje.setText(String.valueOf(num));
+        }
 
-        num = new Random().nextInt(8) + 1;
-        btnBr2.setText(String.valueOf(num));
-        btnBr2.setEnabled(true);
+        if(globalBr == 1) {
+            num = new Random().nextInt(8) + 1;
+            btnBr1.setText(String.valueOf(num));
+            btnBr1.setEnabled(true);
+            System.out.println("globalbr SHOULD BE 1 === " + globalBr);
+        }
 
-        num = new Random().nextInt(8) + 1;
-        btnBr3.setText(String.valueOf(num));
-        btnBr3.setEnabled(true);
+        if(globalBr == 2) {
+            num = new Random().nextInt(8) + 1;
+            btnBr2.setText(String.valueOf(num));
+            btnBr2.setEnabled(true);
+        }
 
-        num = new Random().nextInt(8) + 1;
-        btnBr4.setText(String.valueOf(num));
-        btnBr4.setEnabled(true);
+        if(globalBr == 3) {
+            num = new Random().nextInt(8) + 1;
+            btnBr3.setText(String.valueOf(num));
+            btnBr3.setEnabled(true);
+        }
+
+        if(globalBr == 4) {
+            num = new Random().nextInt(8) + 1;
+            btnBr4.setText(String.valueOf(num));
+            btnBr4.setEnabled(true);
+        }
 
         int[] arr = new int[] {10, 15, 20};
-        num = new Random().nextInt(3);
-        int num2 = arr[num];
-        btnBr5.setText(String.valueOf(num2));
-        btnBr5.setEnabled(true);
+        int num2;
 
-        arr = new int[] {25, 50, 75, 100};
-        num = new Random().nextInt(4);
-        num2 = arr[num];
-        btnBr6.setText(String.valueOf(num2));
-        btnBr6.setEnabled(true);
+        if(globalBr == 5) {
+            num = new Random().nextInt(3);
+            num2 = arr[num];
+            btnBr5.setText(String.valueOf(num2));
+            btnBr5.setEnabled(true);
+        }
 
-        btnPlus.setEnabled(true);
-        btnMinus.setEnabled(true);
-        btnMultiply.setEnabled(true);
-        btnDivide.setEnabled(true);
-        btnOpenBracket.setEnabled(true);
-        btnClosedBracket.setEnabled(true);
+        if(globalBr == 6) {
+            arr = new int[]{25, 50, 75, 100};
+            num = new Random().nextInt(4);
+            num2 = arr[num];
+            btnBr6.setText(String.valueOf(num2));
+            btnBr6.setEnabled(true);
+
+
+            btnPlus.setEnabled(true);
+            btnMinus.setEnabled(true);
+            btnMultiply.setEnabled(true);
+            btnDivide.setEnabled(true);
+            btnOpenBracket.setEnabled(true);
+            btnClosedBracket.setEnabled(true);
+        }
     }
 
     //redo sve osim evaluateMathExpression
@@ -286,8 +346,20 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
     private void btnDeleteLogic(){
         String resultString = (String) txtResenje.getText();
         if(resultString.length() != 0) {
-            resultString = resultString.substring(0, resultString.length() - 1);
-            txtResenje.setText(resultString);
+            String lastEl = resultString.substring(resultString.length() - 1);
+            System.out.println("lastel - " + lastEl);
+            if("0123456789".indexOf(lastEl) != -1) {
+                Button btn = (Button) arrResenje.get(arrResenje.size() - 1);
+                resultString = resultString.substring(0, resultString.length() - btn.getText().length());
+                btn.setEnabled(true);
+                txtResenje.setText(resultString);
+                System.out.println(btn.getText());
+                arrResenje.remove(btn);
+            }
+            else{
+                resultString = resultString.substring(0, resultString.length() - 1);
+                txtResenje.setText(resultString);
+            }
         }
     }
 
@@ -323,6 +395,7 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
             if( ( (lastChar.equals("+")) || (lastChar.equals("-")) || (lastChar.equals("*")) || (lastChar.equals("/")) || (lastChar.equals("(")) ) && (!lastChar.equals(")")) ){
                 Button clickedButton = findViewById(v.getId());
                 resultString += clickedButton.getText().toString();
+                arrResenje.add(clickedButton);
                 clickedButton.setEnabled(false);
                 txtResenje.setText(resultString);
             }
@@ -343,5 +416,140 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
             return 0;
         }
+    }
+
+
+
+
+
+    // senzori
+
+
+    /*
+     * Bitno je da zakacimo/otkacimo listener na pravom mestu. Kada zelmo da koristimo
+     * odredjeni senzor, najbolje mesto da se listener zakaci, da bi dobijali merenja,
+     * jeste metoda onResume.
+     * */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        for(Sensor s : sensors){
+            Log.i("REZ_TYPE_ALL", s.getName());
+        }
+
+        // register this class as a listener for the orientation and
+        // accelerometer sensors
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION),
+                SensorManager.SENSOR_DELAY_NORMAL);
+
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
+                SensorManager.SENSOR_DELAY_NORMAL);
+
+        Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        if (proximitySensor == null) {
+            Toast.makeText(this, "No proximity sensor found in device.", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            // registering our sensor with sensor manager
+            sensorManager.registerListener(this,
+                    proximitySensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /*
+     * Najbolje mesto da otkacimo listener jeste onPause. Voditi racuna
+     * da se svi listener-i koji rade sa senzorima otkace, kada
+     * vise ne zelimo da ih koristimo.
+     * */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+    private static final int SHAKE_THRESHOLD = 1500;
+    private long lastUpdate;
+    private float last_x;
+    private float last_y;
+    private float last_z;
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if ((curTime - lastUpdate) > 100) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float[] values = sensorEvent.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float speed = Math.abs(x+y+z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    Log.d("REZ", "shake detected w/ speed: " + speed);
+                    //tvAccelerometer.setText("Accelerometer: shaking \n [" + x + ", " + y + ", " + z + "]");
+                    //Toast.makeText(this, "SHAKING", Toast.LENGTH_SHORT).show();
+                    globalBr++;
+                    onPause();
+                    if(globalBr < 7){
+                        System.out.println("globalbr === " + globalBr);
+                        btnStopLogic();
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                            onResume();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                    else {
+                        onPause();
+                    }
+                }else{
+                    //tvAccelerometer.setText("Accelerometer: not shaking \n [" + x + ", " + y + ", " + z + "]");
+                    //Toast.makeText(this, "NOT SHAKING", Toast.LENGTH_SHORT).show();
+
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//        if(sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+//            Log.i("REZ_ACCELEROMETER", String.valueOf(accuracy));
+//        }else if(sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
+//            Log.i("REZ_LINEAR_ACCELERATION", String.valueOf(accuracy));
+//        }else if(sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+//            Log.i("REZ_MAGNETIC_FIELD", String.valueOf(accuracy));
+//        }else if(sensor.getType() == Sensor.TYPE_GYROSCOPE){
+//            Log.i("REZ_GYROSCOPE", String.valueOf(accuracy));
+//        }else if(sensor.getType() == Sensor.TYPE_PROXIMITY){
+//            Log.i("REZ_TYPE_PROXIMITY", String.valueOf(accuracy));
+//        }else{
+//            Log.i("REZ_OTHER_SENSOR", String.valueOf(accuracy));
+//        }
+
     }
 }
