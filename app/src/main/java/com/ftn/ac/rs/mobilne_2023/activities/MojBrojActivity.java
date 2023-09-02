@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,19 +20,37 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.MainActivity;
 import com.ftn.ac.rs.mobilne_2023.R;
+import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
 import com.ftn.ac.rs.mobilne_2023.fragments.GameHeaderFragment;
 import com.ftn.ac.rs.mobilne_2023.tools.FragmentTransition;
 
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import io.socket.client.Socket;
+
 public class MojBrojActivity extends AppCompatActivity implements View.OnClickListener , SensorEventListener {
 
+
+    public static Socket socket = SocketHandler.getSocket();
+
+    boolean twoPlayer;
+
+    int switcher;
+
+    private Bundle gameBundle;
     private Button btnResenje1;
     private Button btnResenje2;
     private Button btnResenje;
@@ -53,22 +72,26 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnOpenBracket;
     private Button btnClosedBracket;
 
+    private HashMap<String, Integer> results = new HashMap<String, Integer>();
+
     private int globalBr = -1;
 
     private CountDownTimer gameTimer;
     private int round;
-    private TextView player1ScoreView;
-    private int playerScore;
+    TextView player1ScoreView;
+    TextView player2ScoreView;
+    TextView player1NameView;
+    TextView player2NameView;
+    int playerScore;
+    int player2Score;
+    String playerName;
+    String player2Name;
 
     // senzori
 
     SensorManager sensorManager;
+    private int globalResult;
 
-    TextView tvAccelerometer;
-    TextView tvLinearAccelerometer;
-    TextView tvMagneticField;
-    TextView tvProximitySensor;
-    TextView tvGyroscope;
 
     // senzori
 
@@ -82,15 +105,27 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
                 false, R.id.headMojBroj);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
+        gameBundle = bundle;
+        if (bundle != null && bundle.getString("unreg-score") != null) {
             playerScore = bundle.getInt("unreg-score");
             round = bundle.getInt("round", 1);
+        } else if (bundle != null) {
+            playerName = bundle.getString("user-username");
+            player2Name = bundle.getString("opponent-username");
+            playerScore = bundle.getInt("user-score");
+            player2Score = bundle.getInt("opponent-score");
+        } else {
+            System.out.println("NO BUNDLE");
         }
+
+        //round = bundle.getInt("round", 1);
+
+
+        twoPlayer = (gameBundle != null && gameBundle.getString("user-username") != null);
 
         initializeView();
 
-        Handler handler = new Handler();
-        handler.postDelayed(() -> startGame(), 1000); // nasty hack
+        startGame(playerName, playerScore, player2Name, player2Score);
 
         // senzori
 
@@ -105,6 +140,7 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
         // senzori
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -130,15 +166,51 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
         dialog.show();
     }
 
-    private void startGame() {
-        player1ScoreView = findViewById(R.id.player1Score);
-        player1ScoreView.setText(Integer.toString(playerScore));
+    private void startGame(String playerName, int playerScore, String player2Name, int player2Score) {
+        if (playerName == null) {
+            player1ScoreView = findViewById(R.id.player1Score);
+            player1ScoreView.setText(Integer.toString(playerScore));
+        } else {
+            player1ScoreView = findViewById(R.id.player1Score);
+            player1ScoreView.setText(Integer.toString(playerScore));
+            player2ScoreView = findViewById(R.id.player2Score);
+            player2ScoreView.setText(Integer.toString(player2Score));
+            player1NameView = findViewById(R.id.player1Name);
+            player1NameView.setText(playerName);
+            player2NameView = findViewById(R.id.player2Name);
+            player2NameView.setText(player2Name);
+        }
+
+
+        if (player2Name != null)
+            blockInput();
 
         startTimer();
     }
 
+    private void blockInput() {
+        socket.emit("getTurn");
+        socket.on("turn", args -> {
+            String username = args[0].toString();
+            runOnUiThread(() -> {
+                if (gameBundle.getString("user-username") != null &&
+                        username.equals(gameBundle.getString("user-username"))) {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(this, "Inputs allowed. Your turn",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    Toast.makeText(this, "Your inputs are blocked. Wait for your turn",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
+
     private void startTimer() {
         TextView time = findViewById(R.id.time);
+        final int[] end = new int[1];
 
         gameTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -153,16 +225,32 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
                 if (round == 1) {
                     Intent intent = new Intent(MojBrojActivity.this, MojBrojActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt("unreg-score",playerScore);
-                    bundle.putInt("round", ++round);
+                    if (gameBundle == null || gameBundle.getString("user-username") == null) {
+                        bundle.putInt("unreg-score",playerScore);
+                        Log.println(Log.INFO, "set-unreg", String.valueOf(playerScore));
+                        bundle.remove("round");
+                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                        bundle.putString("user-username", playerName);
+                        bundle.putString("opponent-username", player2Name);
+                        bundle.putInt("user-score", playerScore);
+                        bundle.putInt("opponent-score", player2Score);
+                    }
                     intent.putExtras(bundle);
                     gameTimer.cancel();
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(MojBrojActivity.this, MainActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putInt("unreg-score",playerScore);
-                    bundle.remove("round");
+                    if (gameBundle == null || gameBundle.getString("user-username") == null) {
+                        bundle.putInt("unreg-score",playerScore);
+                        Log.println(Log.INFO, "set-unreg", String.valueOf(playerScore));
+                        bundle.remove("round");
+                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                        bundle.putString("user-username", playerName);
+                        bundle.putString("opponent-username", player2Name);
+                        bundle.putInt("user-score", playerScore);
+                        bundle.putInt("opponent-score", player2Score);
+                    }
                     intent.putExtras(bundle);
                     gameTimer.cancel();
                     startActivity(intent);
@@ -261,44 +349,72 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void btnStopLogic() {
-        System.out.println("globalbr === " + globalBr);
+        //System.out.println("globalbr === " + globalBr);
         if(globalBr == 6) {
             btnStop.setEnabled(false);
             btnConfirm.setEnabled(true);
             txtResenje.setEnabled(true);
             btnDel.setEnabled(true);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
 
         int num;
 
         if(globalBr == 0) {
             num = new Random().nextInt(1000);
-            btnResenje.setText(String.valueOf(num));
+            globalResult = num;
+            socket.emit("mbResenje", num);
+            socket.on("putMbResenje", args -> {
+                String num1 = (String) args[1];
+                btnResenje.setText(num1);
+                //btnResenje.setText(String.valueOf(num));
+            });
+
         }
 
         if(globalBr == 1) {
             num = new Random().nextInt(8) + 1;
-            btnBr1.setText(String.valueOf(num));
-            btnBr1.setEnabled(true);
-            System.out.println("globalbr SHOULD BE 1 === " + globalBr);
+            socket.emit("mb1", num);
+            socket.on("putMb1", args -> {
+                String num1 = (String) args[1];
+                btnBr1.setText(num1);
+            });
+            //btnBr1.setText(String.valueOf(num));
+            //btnBr1.setEnabled(true);
+            //System.out.println("globalbr SHOULD BE 1 === " + globalBr);
         }
 
         if(globalBr == 2) {
             num = new Random().nextInt(8) + 1;
-            btnBr2.setText(String.valueOf(num));
-            btnBr2.setEnabled(true);
+            socket.emit("mb2", num);
+            socket.on("putMb2", args -> {
+                String num1 = (String) args[1];
+                btnBr2.setText(num1);
+            });
+            //btnBr2.setText(String.valueOf(num));
+            //btnBr2.setEnabled(true);
         }
 
         if(globalBr == 3) {
             num = new Random().nextInt(8) + 1;
-            btnBr3.setText(String.valueOf(num));
-            btnBr3.setEnabled(true);
+            socket.emit("mb3", num);
+            socket.on("putMb3", args -> {
+                String num1 = (String) args[1];
+                btnBr3.setText(num1);
+            });
+            //btnBr3.setText(String.valueOf(num));
+            //btnBr3.setEnabled(true);
         }
 
         if(globalBr == 4) {
             num = new Random().nextInt(8) + 1;
-            btnBr4.setText(String.valueOf(num));
-            btnBr4.setEnabled(true);
+            socket.emit("mb4", num);
+            socket.on("putMb4", args -> {
+                String num1 = (String) args[1];
+                btnBr4.setText(num1);
+            });
+            //btnBr4.setText(String.valueOf(num));
+            //btnBr4.setEnabled(true);
         }
 
         int[] arr = new int[] {10, 15, 20};
@@ -307,16 +423,26 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
         if(globalBr == 5) {
             num = new Random().nextInt(3);
             num2 = arr[num];
-            btnBr5.setText(String.valueOf(num2));
-            btnBr5.setEnabled(true);
+            socket.emit("mb5", num2);
+            socket.on("putMb5", args -> {
+                String num1 = (String) args[1];
+                btnBr5.setText(num1);
+            });
+            //btnBr5.setText(String.valueOf(num2));
+            //btnBr5.setEnabled(true);
         }
 
         if(globalBr == 6) {
             arr = new int[]{25, 50, 75, 100};
             num = new Random().nextInt(4);
             num2 = arr[num];
-            btnBr6.setText(String.valueOf(num2));
-            btnBr6.setEnabled(true);
+            socket.emit("mb6", num2);
+            socket.on("putMb6", args -> {
+                String num1 = (String) args[1];
+                btnBr6.setText(num1);
+            });
+            //btnBr6.setText(String.valueOf(num2));
+            //btnBr6.setEnabled(true);
 
 
             btnPlus.setEnabled(true);
@@ -325,20 +451,34 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
             btnDivide.setEnabled(true);
             btnOpenBracket.setEnabled(true);
             btnClosedBracket.setEnabled(true);
+            btnBr1.setEnabled(true);
+            btnBr2.setEnabled(true);
+            btnBr3.setEnabled(true);
+            btnBr4.setEnabled(true);
+            btnBr5.setEnabled(true);
+            btnBr6.setEnabled(true);
+
+
+
         }
     }
 
     //redo sve osim evaluateMathExpression
     private void btnConfirmLogic() {
-        btnResenje1.setEnabled(true);
+        btnConfirm.setEnabled(false);
         String resultString = txtResenje.getText().toString();
         int result = (int) evaluateMathExpression(resultString);
-        btnResenje1.setText(String.valueOf(result));
+        if(!twoPlayer) {
+            btnResenje1.setText(String.valueOf(result));
 
-        if (btnResenje1.getText().toString().equals(btnResenje.getText().toString()))
-            playerScore += 20;
-        else
-            playerScore += 5;
+            if (btnResenje1.getText().toString().equals(btnResenje.getText().toString()))
+                playerScore += 20;
+            else
+                playerScore += 5;
+        }
+        else{
+            twoPlayerLogic(resultString);
+        }
 
         gameTimer.onFinish();
     }
@@ -417,6 +557,63 @@ public class MojBrojActivity extends AppCompatActivity implements View.OnClickLi
             return 0;
         }
     }
+
+    public void twoPlayerLogic(String result){
+
+        socket.emit("mbConfirm", result, gameBundle.getString("user-username"));
+        socket.on("mbResult", args  -> {
+            results.put(args[1].toString(), (Integer) args[0]);
+        });
+
+        if((results.get(playerName) != null) && (results.get(player2Name) != null)){
+            int result1 = results.get(playerName);
+            int result2 = results.get(player2Name);
+            btnResenje1.setText(String.valueOf(result1));
+            btnResenje2.setText(String.valueOf(result1));
+            if(Math.abs(result1 - globalResult) < Math.abs(result2 - globalResult)){
+                playerScore += 20;
+            }
+            if((result1 == globalResult) && (result2 != globalResult)){
+                playerScore += 20;
+            } else if ((result2 == globalResult) && (result1 != globalResult)) {
+                player2Score += 20;
+            } else if ((result1 == globalResult) && (result2 == globalResult)) {
+                // cija je igra += 20;
+            } else if(Math.abs(result1 - globalResult) < Math.abs(result2 - globalResult)){
+                playerScore += 20;
+            } else if(Math.abs(result1 - globalResult) > Math.abs(result2 - globalResult)){
+                player2Score += 20;
+            }
+        }
+
+        socket.emit("mbScoreUpdate", playerName, playerScore, player2Name, player2Score);
+        socket.on("scoreUpdate", args -> {
+            if (args.length > 0 && args[0] instanceof JSONObject) {
+                JSONObject data = (JSONObject) args[0];
+                Log.println(Log.INFO, "args-score", Arrays.toString(args));
+                try {
+                    for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                        String playerName = it.next();
+                        if (playerName.equals(gameBundle.getString("user-username"))) {
+                            playerScore = data.getInt(playerName);
+                            runOnUiThread(() ->
+                                    player1ScoreView.setText(Integer.toString(playerScore)));
+                        }
+                        else if (playerName.equals(gameBundle.getString("opponent-username"))) {
+                            player2Score = data.getInt(playerName);
+                            runOnUiThread(() ->
+                                    player2ScoreView.setText(Integer.toString(player2Score)));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+    };
 
 
 

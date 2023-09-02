@@ -167,4 +167,47 @@ io.on('connection', (socket) => {
 
     io.emit('playerLeft', name);
   });
+
+
+    // moj broj
+    socket.on("mbResenje", (num) => {
+        socket.emit("putMbResenje", num);
+    });
+
+    socket.on("mb1", (num) => {
+        socket.emit("putMb1", num);
+    });
+
+    socket.on("mb2", (num) => {
+        socket.emit("putMb2", num);
+    });
+
+    socket.on("mb3", (num) => {
+        socket.emit("putMb3", num);
+    });
+
+    socket.on("mb4", (num) => {
+        socket.emit("putMb4", num);
+    });
+
+    socket.on("mb5", (num) => {
+        socket.emit("putMb5", num);
+    });
+
+    socket.on("mb6", (num) => {
+        socket.emit("putMb6", num);
+    });
+
+
+    socket.on("mbConfirm", (result, player) => {
+        socket.emit("mbResult", result, player);
+    });
+
+  socket.on('spojniceScoreUpdate', (player1, score1, player2, score2) => {
+    scores[player1] = score1;
+    scores[player2] = score2;
+
+    io.emit('scoreUpdate', scores);
+    console.log(scores);
+  });
 });
