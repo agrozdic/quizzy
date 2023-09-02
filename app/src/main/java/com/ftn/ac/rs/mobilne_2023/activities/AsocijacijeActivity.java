@@ -1,6 +1,10 @@
 package com.ftn.ac.rs.mobilne_2023.activities;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -30,7 +34,9 @@ import java.util.Iterator;
 
 import io.socket.client.Socket;
 
-public class AsocijacijeActivity extends AppCompatActivity {
+public class AsocijacijeActivity extends AppCompatActivity implements SensorEventListener {
+
+    SensorManager sensorManager;
 
     public static Socket socket = SocketHandler.getSocket();;
 
@@ -87,6 +93,8 @@ public class AsocijacijeActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_asocijacije);
 
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
         FragmentTransition.to(GameHeaderFragment.newInstance("param1", "param2"), AsocijacijeActivity.this,
                 false, R.id.headAsocijacije);
 
@@ -105,6 +113,50 @@ public class AsocijacijeActivity extends AppCompatActivity {
 
         startGame(playerName, playerScore, player2Name, player2Score);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        if (proximitySensor == null) {
+            Toast.makeText(this, "No proximity sensor found in device.", Toast.LENGTH_SHORT).show();
+        } else {
+            sensorManager.registerListener(this,
+                    proximitySensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            float[] values = sensorEvent.values;
+            float x = values[0];
+            if (x == 0) {
+                if (twoPlayer) {
+                    socket.emit("turnCheck");
+                    socket.on("turnOf", args -> {
+                        String username = args[0].toString();
+                        if (username.equals(gameBundle.getString("user-username"))) {
+                            socket.emit("invert"); // TODO test this
+                            blockInput();
+                            clicker++;
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) { }
 
     @Override
     public void onBackPressed() {

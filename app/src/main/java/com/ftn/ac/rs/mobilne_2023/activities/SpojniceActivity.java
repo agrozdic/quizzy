@@ -233,16 +233,6 @@ public class SpojniceActivity extends AppCompatActivity {
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
                         bundle.putInt("opponent-score", player2Score);
-
-                        // sansa da imaju isti rezultat posle ko zna zna i 1 runde spojnica
-                        // (u teoriji) je oko 0.85%
-                        // ako imaju isti rezultat, gleda se duzina imena, ako je i to isto (0.425%)
-                        // onda svaka cast
-                        if (playerScore > player2Score
-                                || (playerScore == player2Score &&
-                                    playerName.length() > player2Name.length())) {
-                            socket.emit("invert");
-                        }
                     }
                     bundle.putInt("round", ++round);
                 } else {
@@ -405,12 +395,15 @@ public class SpojniceActivity extends AppCompatActivity {
                     pair5a.setEnabled(false);
                     break;
                 case "5a":
+                    boolean end = !pair1b.isEnabled() && !pair2b.isEnabled() && !pair3b.isEnabled() &&
+                            !pair4b.isEnabled() && !pair5b.isEnabled();
                     if (twoPlayer) {
                         socket.emit("getSwitcher");
                         socket.on("switcher", args -> {
                             switcher = Integer.parseInt(args[0].toString());
                         });
-                        if (switcher == 2) {
+                        if (switcher == 2 || end) {
+                            socket.emit("endSpojnice");
                             gameTimer.onFinish();
                             gameTimer.cancel();
                         } else {
