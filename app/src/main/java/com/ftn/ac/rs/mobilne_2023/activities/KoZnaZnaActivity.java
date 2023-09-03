@@ -84,6 +84,12 @@ public class KoZnaZnaActivity extends AppCompatActivity {
 
         builder.setPositiveButton("Yes", (dialog, which) -> {
             Intent intent = new Intent(this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("user-username", gameBundle.getString("user-username"));
+            bundle.putString("user-email", gameBundle.getString("user-email"));
+            bundle.putInt("user-id", gameBundle.getInt("user-id"));
+            bundle.putInt("user-tokens", gameBundle.getInt("user-tokens"));
+            intent.putExtras(bundle);
             startActivity(intent);
 
             gameTimer.cancel();
@@ -144,6 +150,9 @@ public class KoZnaZnaActivity extends AppCompatActivity {
                     bundle.putString("opponent-username", player2Name);
                     bundle.putInt("user-score", playerScore);
                     bundle.putInt("opponent-score", player2Score);
+                    bundle.putInt("user-id", gameBundle.getInt("user-id"));
+                    bundle.putString("user-email", gameBundle.getString("user-email"));
+                    bundle.putInt("user-tokens", gameBundle.getInt("user-tokens"));
                 }
                 intent.putExtras(bundle);
                 gameTimer.cancel();

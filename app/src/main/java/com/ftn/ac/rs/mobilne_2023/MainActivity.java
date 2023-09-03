@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftn.ac.rs.mobilne_2023.activities.FriendListActivity;
@@ -15,6 +16,7 @@ import com.ftn.ac.rs.mobilne_2023.activities.ProfileActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.RankListActivity;
 import com.ftn.ac.rs.mobilne_2023.activities.SignInActivity;
 import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
+import com.ftn.ac.rs.mobilne_2023.services.UserService;
 
 
 import org.json.JSONException;
@@ -30,9 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static Socket socket;
 
+    private UserService userService = new UserService();
+
     private Bundle userBundle;
 
     private Button btnStartGame;
+
+    private TextView tokensView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
             SocketHandler.setSocket();
             socket = SocketHandler.getSocket();
             socket.connect();
+
+            tokensView = findViewById(R.id.tokensTextView);
+            int tokens = bundle.getInt("user-tokens");
+            tokensView.setText(tokens + " Ⓣ");
         }
     }
 
@@ -99,7 +109,14 @@ public class MainActivity extends AppCompatActivity {
 
     protected void startGame() {
         btnStartGame.setEnabled(false);
-        if (userBundle != null && userBundle.getString("user-username") != null) {
+        if (userBundle != null && userBundle.getString("user-username") != null &&
+                userBundle.getInt("user-tokens") > 0) {
+            int newTokens = userBundle.getInt("user-tokens") - 1;
+            tokensView.setText(newTokens + " Ⓣ");
+
+            UserService.updateUserTokens(userBundle.getInt("user-id"), newTokens, false);
+            userBundle.putInt("user-tokens", newTokens);
+
             socket.emit("joinGame", userBundle.getString("user-username"));
             socket.on("startGame", args -> {
                 if (args.length > 0 && args[0] instanceof JSONObject) {
@@ -117,9 +134,14 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     intent.putExtra("user-username", userBundle.getString("user-username"));
+                    intent.putExtra("user-email", userBundle.getString("user-email"));
+                    intent.putExtra("user-id", userBundle.getInt("user-id"));
+                    intent.putExtra("user-tokens", userBundle.getInt("user-tokens"));
                     startActivity(intent);
                 }
             });
+        } else if (userBundle != null && userBundle.getString("user-username") != null) {
+            Toast.makeText(this, "Not enough tokens to start a game", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(MainActivity.this, KoZnaZnaActivity.class);
             startActivity(intent);

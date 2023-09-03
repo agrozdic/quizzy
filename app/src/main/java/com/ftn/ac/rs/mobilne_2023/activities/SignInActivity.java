@@ -14,6 +14,8 @@ import com.ftn.ac.rs.mobilne_2023.model.User;
 import com.ftn.ac.rs.mobilne_2023.services.UserService;
 import com.ftn.ac.rs.mobilne_2023.tools.NetworkUtils;
 
+import java.time.LocalDate;
+
 public class SignInActivity extends AppCompatActivity {
 
     UserService userService = new UserService();
@@ -47,10 +49,23 @@ public class SignInActivity extends AppCompatActivity {
 
         User user = userService.loginUser(loginIdentifier, password);
 
+        LocalDate tokensLastReceived;
+        if (user.getTokensLastReceived() == null)
+            tokensLastReceived = null;
+        else
+            tokensLastReceived = LocalDate.parse(user.getTokensLastReceived());
+
+        if (tokensLastReceived == null || tokensLastReceived.isBefore(LocalDate.now())) {
+            UserService.updateUserTokens(user.getId(), user.getTokens() + 5, true);
+            user.setTokens(user.getTokens() + 5);
+        }
+
         if (user != null) {
             Bundle bundle = new Bundle();
+            bundle.putInt("user-id", user.getId());
             bundle.putString("user-username", user.getUsername());
             bundle.putString("user-email", user.getEmail());
+            bundle.putInt("user-tokens", user.getTokens());
             intent.putExtras(bundle);
             startActivity(intent);
         }

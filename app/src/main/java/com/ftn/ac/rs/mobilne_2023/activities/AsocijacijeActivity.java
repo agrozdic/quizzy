@@ -166,6 +166,12 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
 
         builder.setPositiveButton("Yes", (dialog, which) -> {
             Intent intent = new Intent(this, MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("user-username", gameBundle.getString("user-username"));
+            bundle.putString("user-email", gameBundle.getString("user-email"));
+            bundle.putInt("user-id", gameBundle.getInt("user-id"));
+            bundle.putInt("user-tokens", gameBundle.getInt("user-tokens"));
+            intent.putExtras(bundle);
             startActivity(intent);
 
             gameTimer.cancel();
@@ -435,6 +441,9 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
                         bundle.putInt("opponent-score", player2Score);
+                        bundle.putInt("user-id", gameBundle.getInt("user-id"));
+                        bundle.putString("user-email", gameBundle.getString("user-email"));
+                        bundle.putInt("user-tokens", gameBundle.getInt("user-tokens"));
 
                         if ((playerScore > player2Score || (playerScore == player2Score &&
                                 playerName.length() > player2Name.length())) && inverted[0] == 0) {
@@ -454,6 +463,9 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
                         bundle.putInt("opponent-score", player2Score);
+                        bundle.putInt("user-id", gameBundle.getInt("user-id"));
+                        bundle.putString("user-email", gameBundle.getString("user-email"));
+                        bundle.putInt("user-tokens", gameBundle.getInt("user-tokens"));
                     }
                     bundle.remove("round");
                 }
