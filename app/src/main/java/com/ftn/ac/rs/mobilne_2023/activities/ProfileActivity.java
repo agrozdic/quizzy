@@ -8,8 +8,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ftn.ac.rs.mobilne_2023.R;
+import com.ftn.ac.rs.mobilne_2023.config.SocketHandler;
+
+import io.socket.client.Socket;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    public static Socket socket = SocketHandler.getSocket();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void logout() {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
+        socket.disconnect();
 
         finish();
     }
