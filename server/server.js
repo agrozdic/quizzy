@@ -58,6 +58,13 @@ io.on('connection', (socket) => {
   });
 
   // globalno za igre
+  socket.on('turnCheck', () => {
+    const currentPlayerIndex = currentTurn % 4 === 0 ? (0 + inverter) : (1 - inverter);
+    const currentPlayer = players[currentPlayerIndex];
+    
+    io.emit('turnOf', currentPlayer);
+  });
+
   socket.on('getTurn', () => {
     const currentPlayerIndex = currentTurn % 4 === 0 ? (0 + inverter) : (1 - inverter);
     const currentPlayer = players[currentPlayerIndex];
