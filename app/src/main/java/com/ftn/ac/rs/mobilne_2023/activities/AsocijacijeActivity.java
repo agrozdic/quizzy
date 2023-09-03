@@ -140,17 +140,16 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
             float[] values = sensorEvent.values;
             float x = values[0];
             if (x == 0) {
-                if (twoPlayer) {
-                    socket.emit("turnCheck");
-                    socket.on("turnOf", args -> {
-                        String username = args[0].toString();
-                        if (username.equals(gameBundle.getString("user-username"))) {
-                            socket.emit("invert"); // TODO test this
-                            blockInput();
-                            clicker++;
-                        }
-                    });
-                }
+                if (a5.isEnabled())
+                    a5.getText().clear();
+                if (b5.isEnabled())
+                    b5.getText().clear();
+                if (c5.isEnabled())
+                    c5.getText().clear();
+                if (d5.isEnabled())
+                    c5.getText().clear();
+                if (konacno.isEnabled())
+                    konacno.getText().clear();
             }
         }
     }
@@ -212,6 +211,7 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
     private void startTimer() {
         TextView time = findViewById(R.id.time);
         final int[] end = new int[1];
+        final int[] inverted = {0};
 
         gameTimer = new CountDownTimer(120000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -288,7 +288,7 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
                            }
                        });
                     });
-                    socket.on("asocijacijeSolved", args -> {
+                    socket.on("asocijacijeSolved", args ->  {
                         String solved = args[0].toString(); // samo jedno konacno
                         runOnUiThread(() -> {
                             switch (solved) {
@@ -381,6 +381,8 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
                                     d4.setEnabled(false);
                                     d5.setText(asocijacijeModel.getD5());
                                     d5.setEnabled(false);
+                                    if (twoPlayer)
+                                        socket.emit("endAsocijacije");
                                     break;
                             }
                         });
@@ -434,9 +436,9 @@ public class AsocijacijeActivity extends AppCompatActivity implements SensorEven
                         bundle.putInt("user-score", playerScore);
                         bundle.putInt("opponent-score", player2Score);
 
-                        if (playerScore > player2Score
-                                || (playerScore == player2Score &&
-                                playerName.length() > player2Name.length())) {
+                        if ((playerScore > player2Score || (playerScore == player2Score &&
+                                playerName.length() > player2Name.length())) && inverted[0] == 0) {
+                            inverted[0]++;
                             socket.emit("invert");
                         }
                     }
