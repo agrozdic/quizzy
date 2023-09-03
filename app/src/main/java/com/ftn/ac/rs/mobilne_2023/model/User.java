@@ -8,6 +8,8 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private int tokens;
+    private String tokensLastReceived;
 
     public User() { }
 
@@ -16,13 +18,17 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.tokens = 5;
+        this.tokensLastReceived = null;
     }
 
-    public User(int id, String email, String username, String password) {
+    public User(int id, String email, String username, String password, int tokens, String tokensLastReceived) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.tokens = tokens;
+        this.tokensLastReceived = tokensLastReceived;
     }
 
     public static int generateId()
@@ -56,5 +62,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(int tokens) {
+        this.tokens = tokens;
+    }
+
+    public String getTokensLastReceived() {
+        return tokensLastReceived;
+    }
+
+    public void setTokensLastReceived(String tokensLastReceived) {
+        this.tokensLastReceived = tokensLastReceived;
     }
 }
