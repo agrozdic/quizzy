@@ -35,6 +35,7 @@ let scores = {};
 let currentTurn = 0;
 let koZnaZnaAnswers = [];
 let switcher = 0;
+let inverter = 0;
 
 app.use(express.static('public'));
 
@@ -57,18 +58,23 @@ io.on('connection', (socket) => {
   });
 
   // globalno za igre
+  socket.on('turnCheck', () => {
+    const currentPlayerIndex = currentTurn % 4 === 0 ? (0 + inverter) : (1 - inverter);
+    const currentPlayer = players[currentPlayerIndex];
+    
+    io.emit('turnOf', currentPlayer);
+  });
+
   socket.on('getTurn', () => {
-    if (switcher <= 2) {
-      if (currentTurn % 4 === 0) {
-        io.emit('turn', players[0]);
-        console.log(players[0] + ' turn');
-      }
-      if (currentTurn % 4 === 2) {
-        io.emit('turn', players[1]);
-        console.log(players[1] + ' turn');
-      }
-      currentTurn++;
-    }
+    const currentPlayerIndex = currentTurn % 4 === 0 ? (0 + inverter) : (1 - inverter);
+    const currentPlayer = players[currentPlayerIndex];
+    
+    io.emit('turn', currentPlayer);
+    console.log(currentPlayer + ' turn');
+    
+    setTimeout(() => {
+        currentTurn++;
+    }, 1000);
   });
 
   socket.on('resetTurn', () => {
@@ -81,6 +87,13 @@ io.on('connection', (socket) => {
 
   socket.on('resetSwitcher', () => {
     switcher = 0;
+  });
+
+  socket.on('invert', () => {
+    if (inverter === 0)
+      inverter = 1;
+    else
+      inverter = 0;
   });
 
   // ko zna zna
@@ -148,6 +161,28 @@ io.on('connection', (socket) => {
   socket.on('endSpojnice', () => {
     io.emit('endSpojnice');
     console.log('End of spojnice');
+  });
+
+  // asocijacije
+  socket.on('asocijacijeOpened', (field) => {
+    io.emit('asocijacijeOpen', field);
+  });
+
+  socket.on('asocijacijeSolution', (solved) => {
+    io.emit('asocijacijeSolved', solved);
+  });
+
+  socket.on('asocijacijeScoreUpdate', (player1, score1, player2, score2) => {
+    scores[player1] = score1;
+    scores[player2] = score2;
+
+    io.emit('scoreUpdate', scores);
+    console.log(scores);
+  });
+
+  socket.on('endAsocijacije', () => {
+    io.emit('endAsocijacije');
+    console.log('End of asocijacije');
   });
 
   // diskonekcija

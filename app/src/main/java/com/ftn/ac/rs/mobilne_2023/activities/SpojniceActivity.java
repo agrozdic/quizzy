@@ -48,10 +48,10 @@ public class SpojniceActivity extends AppCompatActivity {
     TextView player2NameView;
     int playerScore;
     int player2Score;
-    int playerStartScore;
-    int player2StartScore;
     String playerName;
     String player2Name;
+
+    boolean twoPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +70,10 @@ public class SpojniceActivity extends AppCompatActivity {
             playerName = bundle.getString("user-username");
             player2Name = bundle.getString("opponent-username");
             playerScore = bundle.getInt("user-score");
-            playerStartScore = playerScore;
             player2Score = bundle.getInt("opponent-score");
-            player2StartScore = player2Score;
         }
         round = bundle.getInt("round", 1);
+        twoPlayer = (gameBundle != null && gameBundle.getString("user-username") != null);
 
         startGame(playerName, playerScore, player2Name, player2Score);
     }
@@ -125,6 +124,8 @@ public class SpojniceActivity extends AppCompatActivity {
             loadControls();
             if (player2Name != null)
                 blockInput();
+            else
+                progressGame("0a");
             startTimer();
         });
     }
@@ -136,7 +137,7 @@ public class SpojniceActivity extends AppCompatActivity {
         gameTimer = new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 time.setText(Long.toString(millisUntilFinished / 1000));
-                if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                if (twoPlayer) {
                     socket.on("spojniceUpdate", args -> {
                         String solved = args[0].toString();
                         String[] solutions = solved.split(";");
@@ -177,6 +178,11 @@ public class SpojniceActivity extends AppCompatActivity {
                             currentPair = "2a";
                         if (!pair1a.isEnabled())
                             currentPair = "1a";
+                        if ((pair1a.isEnabled() && pair2a.isEnabled() && pair3a.isEnabled()
+                                && pair4a.isEnabled() && pair5a.isEnabled()) ||
+                                pair1a.isEnabled()) {
+                            currentPair = "0a";
+                        }
                         progressGame(currentPair);
                     });
                     socket.on("scoreUpdate", args -> {
@@ -222,7 +228,7 @@ public class SpojniceActivity extends AppCompatActivity {
                     intent = new Intent(SpojniceActivity.this, SpojniceActivity.class);
                     if (gameBundle != null && gameBundle.getString("user-username") == null) {
                         bundle.putInt("unreg-score",playerScore);
-                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    } else if (twoPlayer) {
                         bundle.putString("user-username", playerName);
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
@@ -230,11 +236,12 @@ public class SpojniceActivity extends AppCompatActivity {
                     }
                     bundle.putInt("round", ++round);
                 } else {
-                    socket.emit("endSpojnice");
                     intent = new Intent(SpojniceActivity.this, AsocijacijeActivity.class);
                     if (gameBundle != null && gameBundle.getString("user-username") == null) {
                         bundle.putInt("unreg-score",playerScore);
-                    } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    } else if (twoPlayer) {
+                        socket.emit("endSpojnice");
+
                         bundle.putString("user-username", playerName);
                         bundle.putString("opponent-username", player2Name);
                         bundle.putInt("user-score", playerScore);
@@ -244,8 +251,17 @@ public class SpojniceActivity extends AppCompatActivity {
                 }
                 intent.putExtras(bundle);
                 gameTimer.cancel();
-                socket.emit("resetTurn");
-                socket.emit("resetSwitcher");
+
+                if (twoPlayer) {
+                    socket.emit("resetTurn");
+                    socket.emit("resetSwitcher");
+                    if (playerScore > player2Score
+                            || (playerScore == player2Score &&
+                            playerName.length() > player2Name.length())) {
+                        socket.emit("invert");
+                    }
+                }
+
                 startActivity(intent);
             }
         }.start();
@@ -276,8 +292,6 @@ public class SpojniceActivity extends AppCompatActivity {
         pair4b = findViewById(R.id.pair4bSpojnice);
         pair5b = findViewById(R.id.pair5bSpojnice);
 
-        pair1a.setEnabled(false);
-
         pair1b.setOnClickListener(view -> checkSolution("1b"));
         pair2b.setOnClickListener(view -> checkSolution("2b"));
         pair3b.setOnClickListener(view -> checkSolution("3b"));
@@ -297,6 +311,7 @@ public class SpojniceActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     Toast.makeText(this, "Inputs allowed. Your turn",
                             Toast.LENGTH_SHORT).show();
+                    progressGame("0a");
                 } else {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -364,6 +379,9 @@ public class SpojniceActivity extends AppCompatActivity {
     private void progressGame(String currentPair) {
         runOnUiThread(() -> {
             switch (currentPair) {
+                case "0a":
+                    pair1a.setEnabled(false);
+                    break;
                 case "1a":
                     pair2a.setEnabled(false);
                     break;
@@ -377,12 +395,15 @@ public class SpojniceActivity extends AppCompatActivity {
                     pair5a.setEnabled(false);
                     break;
                 case "5a":
-                    if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                    boolean end = !pair1b.isEnabled() && !pair2b.isEnabled() && !pair3b.isEnabled() &&
+                            !pair4b.isEnabled() && !pair5b.isEnabled();
+                    if (twoPlayer) {
                         socket.emit("getSwitcher");
                         socket.on("switcher", args -> {
                             switcher = Integer.parseInt(args[0].toString());
                         });
-                        if (switcher == 2) {
+                        if (switcher == 2 || end) {
+                            socket.emit("endSpojnice");
                             gameTimer.onFinish();
                             gameTimer.cancel();
                         } else {

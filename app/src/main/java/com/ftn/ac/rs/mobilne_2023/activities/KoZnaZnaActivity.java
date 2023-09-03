@@ -50,6 +50,8 @@ public class KoZnaZnaActivity extends AppCompatActivity {
     String playerName;
     String player2Name;
 
+    boolean twoPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,7 @@ public class KoZnaZnaActivity extends AppCompatActivity {
             playerName = bundle.getString("user-username");
             player2Name = bundle.getString("opponent-username");
         }
+        twoPlayer = (gameBundle != null && gameBundle.getString("user-username") != null);
 
         startGame(playerName, player2Name);
     }
@@ -136,7 +139,7 @@ public class KoZnaZnaActivity extends AppCompatActivity {
                     bundle.putInt("unreg-score",playerScore);
                     Log.println(Log.INFO, "set-unreg", String.valueOf(playerScore));
                     bundle.remove("round");
-                } else if (gameBundle != null && gameBundle.getString("user-username") != null) {
+                } else if (twoPlayer) {
                     bundle.putString("user-username", playerName);
                     bundle.putString("opponent-username", player2Name);
                     bundle.putInt("user-score", playerScore);
