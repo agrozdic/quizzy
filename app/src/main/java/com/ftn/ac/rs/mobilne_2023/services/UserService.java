@@ -8,7 +8,9 @@ import com.ftn.ac.rs.mobilne_2023.model.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,8 +31,10 @@ public class UserService {
                 String email = (String) userData.get("email");
                 String username = (String) userData.get("username");
                 String pass = (String) userData.get("password");
+                int tokens = Integer.parseInt(userData.get("tokens").toString());
+                String receivedDate = (String) userData.get("tokensLastReceived");
 
-                User user = new User(id, email, username, pass);
+                User user = new User(id, email, username, pass, tokens, receivedDate);
                 users.put(Integer.toString(user.getId()), user);
             }
         });
@@ -44,8 +48,10 @@ public class UserService {
                 String email = (String) userData.get("email");
                 String username = (String) userData.get("username");
                 String pass = (String) userData.get("password");
+                int tokens = Integer.parseInt(userData.get("tokens").toString());
+                String receivedDate = (String) userData.get("tokensLastReceived");
 
-                User user = new User(id, email, username, pass);
+                User user = new User(id, email, username, pass, tokens, receivedDate);
                 users.put(Integer.toString(user.getId()), user);
             }
         });
@@ -102,6 +108,8 @@ public class UserService {
         user.put("email", email);
         user.put("username", username);
         user.put("password", password);
+        user.put("tokens", 5);
+        user.put("tokensLastReceived", null);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document("user" + id)
@@ -111,6 +119,23 @@ public class UserService {
                     reloadUsers();
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+    }
+
+    public static void updateUserTokens(int id, int tokens,boolean updateDate) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("tokens", tokens);
+
+        if (updateDate)
+            data.put("tokensLastReceived", LocalDate.now().toString());
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document("user" + id)
+                .set(data, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "DocumentSnapshot successfully written");
+                    reloadUsers();
+                })
+                .addOnFailureListener(e -> Log.w(TAG, "Error updating tokens", e));
     }
 
     public User loginUser(String loginIdentifier, String password) {
